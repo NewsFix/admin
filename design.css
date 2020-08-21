@@ -1,0 +1,132 @@
+body {
+  /* importantは暫定的。修正必要 */
+  background-color: #000 !important;
+}
+
+.container {
+  height: 50em;
+  background-color: #000;
+}
+
+.comment {
+  margin: 1% auto;
+  padding: 0.2em;
+  width: 100%;
+  border: solid 5px #fff;
+  border-radius: 0.2em 0.2em;
+  box-shadow: 0.1em 0.1em 0.2em;
+}
+
+#result {
+  color: #fff;
+  font-size: 2em;
+}
+
+.battle {
+  width: 100%;
+  height: 32%;
+  background-color: #000;
+  position: relative;
+  border: solid 5px #fff;
+  border-radius: 0.2em 0.2em;
+  box-shadow: 0.1em 0.1em 0.2em;
+}
+
+.battle > img {
+  position: absolute;
+  top: 1%;
+  left: 33%;
+  width: 35%;
+  height: auto;
+}
+
+.org-test {
+  width: 100%;
+  border: solid 3px #fff;
+  height: 15em;
+  margin: 2% auto;
+}
+
+.command {
+  padding: 1% 3%;
+  width: 25%;
+  border: 0.5em solid #fff;
+  border-radius: 1em;
+}
+
+.command > ul {
+  list-style: none;
+  font-size: 2em;
+  color: #fff;
+}
+
+.party {
+  width: 75%;
+  height: 100%;
+}
+
+.main-char {
+  width: 33%;
+  height: 100%;
+  border: 0.5em solid #fff;
+  border-radius: 1em;
+}
+
+.main-char > ul {
+  margin: 5% auto;
+  list-style: none;
+  font-size: 2em;
+  color: #fff;
+}
+
+.session_info {
+  width: 67%;
+  height: 100%;
+  border: 0.5em solid #fff;
+  border-radius: 1em;
+}
+
+.session_info > p {
+  margin: 5% 2%;
+  color: #fff;
+  font-size: 2em;
+}
+.title {
+  font-family: "Nico Moji";
+  color: bisque;
+}
+
+.title > h1:nth-child(1) {
+  margin: 2% 8% 0;
+  font-size: 10em;
+}
+
+.title > h1:nth-child(2) {
+  margin: 0 16%;
+  font-size: 10em;
+}
+
+.option {
+  font-family: "Nico Moji";
+  width: 30%;
+  margin: 3% auto;
+  border: 0.5em solid #fff;
+  border-radius: 1em;
+  transition: all 0.3s ease;
+}
+
+#option-command > a {
+  color: #fff;
+  text-decoration: none;
+}
+
+#option-command {
+  font-size: 3em;
+  background-color: #000;
+  border-color: #000;
+}
+
+#option-command:hover {
+  transition: all 1s ease;
+  background-color: rgb(121, 121, 121);
+}
