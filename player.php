@@ -1,17 +1,18 @@
 <?php
 
-class Player
-{
-    public $name;
-    public $hp = 10000;
-    public $mp = 500;
-    public $skill = '';
+require_once("char.php");
 
-    public function __construct($name, $hp, $mp, $skill)
+class Player extends Char
+{
+    public function attack1()
     {
-        $this->name = $name;
-        $this->hp = $hp;
-        $this->mp = $mp;
-        $this->skill = $skill;
+        $rand = rand(20, 200);
+        return $rand;
+    }
+
+    public function attack2()
+    {
+        $rand = rand(20, 200);
+        return $rand;
     }
 }

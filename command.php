@@ -14,13 +14,13 @@ function attack($player, $pinoko)
     $rand = strval($rand);
     $rand = mb_convert_kana($rand, "N");
 
-    $player_text = $player->name. "は". $pinoko->skill['tech1'].'を唱えた!!!';
+    $player_text = $player->name. "は". $pinoko->skill["tech1"]."を唱えた!!!";
     $pinoko_text = $pinoko->name."に".$rand ." のダメージを与えた!!";
 
     return $player_text . $pinoko_text;
 }
 
-public function get($player, $pinoko)
+function get($player, $pinoko)
 {
     $strike_text = "";
 

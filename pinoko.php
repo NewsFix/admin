@@ -1,38 +1,38 @@
 <?php
+declare(strict_types=1);
 
-class Pinoko
+
+require_once("char.php");
+
+class Pinoko extends Char
 {
-    public $name;
-    public $hp = 10000;
-    public $mp = 500;
-    public $skill = '';
-
-    public function __construct($name, $hp, $mp, $skill)
-    {
-        $this->name = $name;
-        $this->hp = $hp;
-        $this->mp = $mp;
-        $this->skill = $skill;
-    }
-
     public function attack1()
     {
-        return "50のダメージ!!";
+        $rand = rand(20, 200);
+        return $rand;
     }
 
     public function attack2()
     {
-        return "100のダメージ!!";
+        $rand = rand(20, 200);
+        return $rand;
     }
 
     public function attack3()
     {
-        return "150のダメージ!!";
+        $rand = rand(20, 200);
+        return $rand;
     }
 
     public function attack4()
     {
-        return "200のダメージ!!";
+        $rand = rand(20, 200);
+        return $rand;
+    }
+
+    public function attack5()
+    {
+        $rand = rand(20, 200);
+        return $rand;
     }
 }
-
