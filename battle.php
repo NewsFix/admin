@@ -94,7 +94,7 @@ function asyncSend(){
 
     }
 
-    req.open('POST',"command.php",true);
+    req.open('POST',"gate_way.php",true);
     req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
     req.send("attack=echo");
 
