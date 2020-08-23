@@ -1,17 +1,18 @@
 <?php
-namespace BOUKEN\pinoko;
-
-use BOUKEN\pinoko as firstEnemy;
 
 class Pinoko
 {
     public $name;
-    public $HP = 10000;
-    public $MP = 500;
+    public $hp = 10000;
+    public $mp = 500;
+    public $skill = '';
 
-    public function __construct($name)
+    public function __construct($name, $hp, $mp, $skill)
     {
         $this->name = $name;
+        $this->hp = $hp;
+        $this->mp = $mp;
+        $this->skill = $skill;
     }
 
     public function attack1()
@@ -35,4 +36,3 @@ class Pinoko
     }
 }
 
-$pinoko = new Pinoko("ピノ子");
