@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-        include_once("pinoko.php");
+include_once("pinoko.php");
 
 
         function attack($pinoko)
