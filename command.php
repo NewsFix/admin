@@ -3,7 +3,7 @@ session_start();
 
 include_once("pinoko.php");
 
-function attack($pinoko)
+function attack($player, $pinoko)
 {
     $rand = rand(50, 200);
     if (!isset($_SESSION["hp"])) {
