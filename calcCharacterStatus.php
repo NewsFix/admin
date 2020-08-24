@@ -21,7 +21,7 @@ class CalcCharacterStatus
      * @param  Boolean $death             即死かどうか
      * @param  Integer $minimumHp         HP最低値 マイナス状態でも生きてるバーサーカーみたいなときに外から入れる
      *
-     * @return 計算結果HP
+     * @return Integer 計算結果HP
      */
     public function subtractionHp(Int $baseHp, Int $calculationStatus, Bool $death = false, Int $minimumHp = self::DEFAULT_MINIMUM_HP): Int
     {
@@ -44,7 +44,7 @@ class CalcCharacterStatus
      * @param  Integer $baseHp            計算のベースとなるHP
      * @param  Integer $calculationStatus 回復値
      *
-     * @return 計算結果HP
+     * @return Integer 計算結果HP
      */
     public function addHp(Int $baseHp, Int $calculationStatus): Int
     {
@@ -64,7 +64,7 @@ class CalcCharacterStatus
      * @param  Integer $baseMp            計算のベースとなるMp
      * @param  Integer $calculationStatus 引かれる予定のMP
      *
-     * @return 計算結果HP
+     * @return Boolean MP利用可否
      */
     public function isUseMp(Int $baseMp, Int $calculationStatus): Bool
     {
@@ -83,7 +83,7 @@ class CalcCharacterStatus
      * @param  Integer $baseMp            計算のベースとなるMp
      * @param  Integer $calculationStatus 引かれるMP
      *
-     * @return 計算結果HP
+     * @return 計算結果MP
      */
     public function subtractionMp(Int $baseMp, Int $calculationStatus): Int
     {
@@ -102,7 +102,7 @@ class CalcCharacterStatus
      * @param  Integer $baseMp            計算のベースとなるMp
      * @param  Integer $calculationStatus 足されるMP
      *
-     * @return 計算結果HP
+     * @return 計算結果MP
      */
     public function addMp(Int $baseMp, Int $calculationStatus): Int
     {
