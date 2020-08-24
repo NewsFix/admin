@@ -18,12 +18,18 @@ class CalcCharacterStatus
      *
      * @param  Integer $baseHp            計算のベースとなるHP
      * @param  Integer $calculationStatus ダメージ
+     * @param  Boolean $death             即死かどうか
      * @param  Integer $minimumHp         HP最低値 マイナス状態でも生きてるバーサーカーみたいなときに外から入れる
      *
      * @return 計算結果HP
      */
-    public function subtractionHp(Int $baseHp, Int $calculationStatus, Int $minimumHp = self::DEFAULT_MINIMUM_HP)
+    public function subtractionHp(Int $baseHp, Int $calculationStatus, Boolean $death, Int $minimumHp = self::DEFAULT_MINIMUM_HP)
     {
+        // 即死の場合HP最低値を返す
+        if ($death) {
+            return $minimumHp;
+        }
+
         // HP最低値以下になったらそれを返す
         if ($minimumHp =< ($baseHp - $calculationStatus)) {
             return $minimumHp;
