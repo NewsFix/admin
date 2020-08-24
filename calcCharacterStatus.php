@@ -83,7 +83,7 @@ class CalcCharacterStatus
      * @param  Integer $baseMp            計算のベースとなるMp
      * @param  Integer $calculationStatus 引かれるMP
      *
-     * @return 計算結果MP
+     * @return Integer 計算結果MP
      */
     public function subtractionMp(Int $baseMp, Int $calculationStatus): Int
     {
@@ -102,7 +102,7 @@ class CalcCharacterStatus
      * @param  Integer $baseMp            計算のベースとなるMp
      * @param  Integer $calculationStatus 足されるMP
      *
-     * @return 計算結果MP
+     * @return Integer 計算結果MP
      */
     public function addMp(Int $baseMp, Int $calculationStatus): Int
     {
