@@ -41,7 +41,7 @@ class SkillsSample
             '001' => [
                 'name': 'お注射',
                 'damage': 0,
-                'addHp': rand(1, 10),
+                'addHp': $this->randomDamage(1, 10),
                 'useMp': 0,
             ],
             '002' => [
@@ -55,5 +55,10 @@ class SkillsSample
                 'useMp': 10,
             ],
         ];
+    }
+
+    private function randomDamage($min, $max)
+    {
+        return rand($min, $max);
     }
 }
