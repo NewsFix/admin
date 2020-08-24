@@ -23,7 +23,7 @@ class CalcCharacterStatus
      *
      * @return 計算結果HP
      */
-    public function subtractionHp(Int $baseHp, Int $calculationStatus, Boolean $death, Int $minimumHp = self::DEFAULT_MINIMUM_HP)
+    public function subtractionHp(Int $baseHp, Int $calculationStatus, Boolean $death = false, Int $minimumHp = self::DEFAULT_MINIMUM_HP)
     {
         // 即死の場合HP最低値を返す
         if ($death) {
