@@ -82,7 +82,7 @@ class SkillsSample
  * TODO 利用イメージ
  */
 $skillClass = new SkillsSample();
-$skill = getById('001');
+$skill = $skillClass->getById('001');
 
 echo $skill['name'];
 echo $skill['text'];
