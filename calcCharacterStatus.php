@@ -23,7 +23,7 @@ class CalcCharacterStatus
      *
      * @return 計算結果HP
      */
-    public function subtractionHp(Int $baseHp, Int $calculationStatus, Boolean $death = false, Int $minimumHp = self::DEFAULT_MINIMUM_HP)
+    public function subtractionHp(Int $baseHp, Int $calculationStatus, Bool $death = false, Int $minimumHp = self::DEFAULT_MINIMUM_HP): Int
     {
         // 即死の場合HP最低値を返す
         if ($death) {
@@ -46,7 +46,7 @@ class CalcCharacterStatus
      *
      * @return 計算結果HP
      */
-    public function addHp(Int $baseHp, Int $calculationStatus)
+    public function addHp(Int $baseHp, Int $calculationStatus): Int
     {
         return $baseHp + $calculationStatus;
     }
@@ -66,7 +66,7 @@ class CalcCharacterStatus
      *
      * @return 計算結果HP
      */
-    public function isUseMp(Int $baseMp, Int $calculationStatus)
+    public function isUseMp(Int $baseMp, Int $calculationStatus): Bool
     {
         $minimumMp = self::DEFAULT_MINIMUM_MP;
         // MP最低値以下になったら利用不可
@@ -85,7 +85,7 @@ class CalcCharacterStatus
      *
      * @return 計算結果HP
      */
-    public function subtractionMp(Int $baseMp, Int $calculationStatus)
+    public function subtractionMp(Int $baseMp, Int $calculationStatus): Int
     {
         $minimumMp = self::DEFAULT_MINIMUM_MP;
         // MP最低値以下になったらそれを返す
@@ -104,7 +104,7 @@ class CalcCharacterStatus
      *
      * @return 計算結果HP
      */
-    public function addMp(Int $baseMp, Int $calculationStatus)
+    public function addMp(Int $baseMp, Int $calculationStatus): Int
     {
         return $baseMp + $calculationStatus;
     }
