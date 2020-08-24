@@ -52,6 +52,32 @@ class CalcCharacterStatus
     }
 
     /**
+     * MPが利用可能か返す
+     * MP 10の時に消費11のスキルを利用されないようにする
+     *
+     * @see 利用イメージ
+     * if isUseMp(10, 11) { // 先にこのメソッドでMPが利用可能か調べる
+     *   $resul = subtractionMp(10, 11); // 実際のMP消費
+     * }
+     * $thisに入れて計算結果を使いまわさないのは利用箇所でバグをはらんだロジックが生まれやすそうだから
+     *
+     * @param  Integer $baseMp            計算のベースとなるMp
+     * @param  Integer $calculationStatus 引かれる予定のMP
+     *
+     * @return 計算結果HP
+     */
+    public function isUseMp(Int $baseMp, Int $calculationStatus)
+    {
+        $minimumMp = self::DEFAULT_MINIMUM_MP;
+        // MP最低値以下になったら利用不可
+        if ($minimumMp =< ($baseMp - $calculationStatus)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * MP減算を行う
      *
      * @param  Integer $baseMp            計算のベースとなるMp
