@@ -39,24 +39,24 @@ class SkillsSample
     {
         return [
             '001' => [
-                'name': 'お注射',
-                'damage': 0,
-                'addHp': $this->randomDamage(1, 10),
-                'useMp': 0,
-                'death': $this->isDeath(0),
-                'text': "お注射を発動した！",
+                'name'=> 'お注射',
+                'damage'=> 0,
+                'addHp'=> $this->randomDamage(1, 10),
+                'useMp'=> 0,
+                'death'=> $this->isDeath(0),
+                'text'=> "お注射を発動した！",
             ],
             '002' => [
-                'name': 'アッチョンブリケ',
-                'damage': 10,
-                'addHp': 0, // 0 だから回復しない
-                'useMp': 0,
+                'name'=> 'アッチョンブリケ',
+                'damage'=> 10,
+                'addHp'=> 0, // 0 だから回復しない
+                'useMp'=> 0,
             ],
             '003' => [
-                'name': 'なのさ',
-                'damage': 100,
-                'addHp': 0,
-                'useMp': 10,
+                'name'=> 'なのさ',
+                'damage'=> 100,
+                'addHp'=> 0,
+                'useMp'=> 10,
             ],
         ];
     }
