@@ -43,15 +43,19 @@ class SkillsSample
                 'damage': 0,
                 'addHp': $this->randomDamage(1, 10),
                 'useMp': 0,
+                'death': $this->isDeath(0),
+                'text': "お注射を発動した！",
             ],
             '002' => [
                 'name': 'アッチョンブリケ',
                 'damage': 10,
+                'addHp': 0, // 0 だから回復しない
                 'useMp': 0,
             ],
             '003' => [
                 'name': 'なのさ',
                 'damage': 100,
+                'addHp': 0,
                 'useMp': 10,
             ],
         ];
@@ -61,4 +65,25 @@ class SkillsSample
     {
         return rand($min, $max);
     }
+
+    /**
+     * @param Int 確率最小値
+     *
+     */
+    private function isDeath($min)
+    {
+        // いい感じのロジックを描く
+        return $min;
+    }
 }
+
+
+/**
+ * TODO 利用イメージ
+ */
+$skillClass = new SkillsSample();
+$skill = getById('001');
+
+echo $skill['name'];
+echo $skill['text'];
+echo $skill['damage']; // これを計算式にぶち込む
