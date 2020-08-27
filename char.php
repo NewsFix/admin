@@ -13,11 +13,11 @@ class Char
         string $name,
         int $hp,
         int $mp,
-        array $skill = []
+        array $skills = []
     ) {
         $this->name = $name;
         $this->hp = $hp;
         $this->mp = $mp;
-        $this->skill = $skill;
+        $this->skills = $skills;
     }
 }
