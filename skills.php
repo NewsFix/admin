@@ -12,7 +12,7 @@ class Skills
      * @param void
      * @return array
      */
-    private function get():array
+    public function get():array
     {
         return $this->createSkills();
     }
@@ -44,22 +44,36 @@ class Skills
     private function createSkills()
     {
         return [
-          001 => [
+          [
             "name" => "お注射",
             "addHP"=> 0,
             "damage"=> $this->randomDamage(50, 100),
             "useMP" => 0,
             "text" => "お注射をねじ込んだ!!",
-            "percent" => 30
           ],
 
-          002 => [
+          [
             "name" => "解剖手術",
             "addHP"=> 0,
             "damage"=> 10000,
             "useMP" => 0,
             "text" => "解剖した",
-            "percent" => 30
+          ],
+
+          [
+            "name" => "カツアゲ",
+            "addHP"=> 0,
+            "damage"=> $this->randomDamage(30, 60),
+            "useMP" => 0,
+            "text" => "を強烈にカツアゲした!!",
+          ],
+
+          [
+            "name" => "カッティングエッジ!",
+            "addHP"=> 0,
+            "damage"=> $this->randomDamage(50, 100),
+            "useMP" => 0,
+            "text" => "闇夜を切り裂いた!!",
           ],
 
 
