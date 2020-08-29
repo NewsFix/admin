@@ -49,9 +49,6 @@ function get($player, $pinoko)
     $enemy_strike_text = "";
     //$_SESSION["pinoko"] = serialize($pinoko);
 
-
-
-
     if (!isset($_SESSION["pinoko"])) {
         //オブジェクト型をSESSIONへ代入する際は必ず
         //serialize化しないと入らない
@@ -59,9 +56,9 @@ function get($player, $pinoko)
     } else {
         $rand = rand(0, count($pinoko->skills));
         $pinoko = unserialize($_SESSION["pinoko"]);
-        $damage = $pinoko->skills[$rand]["damage"];
+        $use_skill = $pinoko->skills[$rand];
+        $damage = $use_skill["damage"];
         $hp = $pinoko->hp - $damage;
-        var_dump($hp);
         $pinoko->setHp($hp);
         $_SESSION["pinoko"] = serialize($pinoko);
     }

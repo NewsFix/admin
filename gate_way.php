@@ -11,7 +11,7 @@ $player = new Char(
     "たけし",
     1000,
     1000,
-    //$skills
+    $skills
 );
 
 $pinoko = new Char(
@@ -27,4 +27,4 @@ $pinoko = new Char(
 require_once("command.php");
 
 
-var_dump(get($player, $pinoko));
+echo json_encode(get($player, $pinoko));
