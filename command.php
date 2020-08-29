@@ -54,14 +54,13 @@ function get($player, $pinoko)
     if (!isset($_COOKIE["player_hp"])) {
         setcookie("player_hp", $player->hp, time()+60*60, "/");
     } else {
-        $player_hp = $_COOKIE["player_hp"];
+        $player->hp = $_COOKIE["player_hp"];
         //$pinokoで名称付しているのはダメージを与える当事者がpinokoのため
         $pinoko_use_skill = $pinoko->skills[$pinoko_rand];
         $pinoko_damage = $pinoko_use_skill["damage"];
         $player_hp = $player->hp - $pinoko_damage;
-        $player->setHp($player_hp);
         setcookie("player_hp", "", time()-60*60, "/");
-        setcookie("player_hp", $player->hp, time()+60*60, "/");
+        setcookie("player_hp", $player_hp, time()+60*60, "/");
     }
 
     if (!isset($_SESSION["pinoko"])) {
@@ -89,7 +88,7 @@ function get($player, $pinoko)
     }
 
     //TODO:テストのため使用。テスト後削除しましょう。
-    var_dump($_COOKIE);
+    //var_dump($_COOKIE);
 
 
     return array(
