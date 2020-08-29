@@ -47,6 +47,7 @@ declare(strict_types=1);
       </div>
       <div class="session_info">
         <p id="enemy_status"></p>
+        <p id="player_status"></p>
       </div>
     </div>
 
@@ -84,13 +85,16 @@ declare(strict_types=1);
 
       var result = document.getElementById('result');
 
-      var value = document.getElementById('enemy_status');
+      var pinoko_value = document.getElementById('enemy_status');
+
+      var player_value = document.getElementById('player_status');
 
       if(req.status == 200){
       var data = JSON.parse(req.responseText);
 
       result.innerHTML = data.strike_text;
-      value.innerHTML = data.pinoko_hp;
+      pinoko_value.innerHTML = data.pinoko_hp;
+      player_value.innerHTML = data.player_hp;
 
       var enemy_response = function() {
       result.innerHTML = data.enemy_strike_text;

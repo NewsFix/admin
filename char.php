@@ -7,7 +7,7 @@ class Char
     public string $name;
     public int $hp;
     public int $mp;
-    public array $skill;
+    public array $skills;
 
     public function __construct(
         string $name,
@@ -19,5 +19,10 @@ class Char
         $this->hp = $hp;
         $this->mp = $mp;
         $this->skills = $skills;
+    }
+
+    public function setHp(int $hp):void
+    {
+        $this->hp = $hp;
     }
 }

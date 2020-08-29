@@ -1,36 +1,34 @@
 <?php
 session_start();
 
-// 不必要の可能性
-//require_once("char.php");
-
-// 攻撃乱数が出来上がるまでの参考として以下を残しておく
-
+ //攻撃乱数が出来上がるまでの参考として以下を残しておく
+ //最終的に削除予定
 
 function attack($player, $pinoko)
 {
     $rand = rand(50, 200);
-    if (!isset($_SESSION["hp"])) {
-        $_SESSION["hp"] = $pinoko->hp;
-    } else {
-        $_SESSION["hp"] -= $rand;
-    }
+
+
+    //乱数を文字化するための目的
+
     $rand = strval($rand);
     $rand = mb_convert_kana($rand, "N");
 
+
     //主人公側の攻撃表示
 
-    $player_text1 = $player->name. "は
-    ファイアを唱えた!!!";
+
+    $player_text1 = $player->name. "はファイアを唱えた!!!";
 
     $player_text2 = $pinoko->name."に".$rand ." のダメージを与えた!!";
 
     return $player_text1 . $player_text2;
 }
 
+
 function enemy_attack($player, $pinoko)
 {
-    $rand = rand(200, 1000);
+    $rand = $pinoko->skills[0]['damage'];
 
     $rand = strval($rand);
     $rand = mb_convert_kana($rand, "N");
@@ -44,15 +42,44 @@ function enemy_attack($player, $pinoko)
     return $pinoko_text1 . $pinoko_text2;
 }
 
+
 function get($player, $pinoko)
 {
+    $pinoko_rand = rand(0, count($pinoko->skills)-2);
     $strike_text = "";
     $enemy_strike_text = "";
+    //$_SESSION["pinoko"] = serialize($pinoko);
 
+    if (!isset($_COOKIE["player"])) {
+        setcookie("player", $player);
+    } else {
+        //$pinokoで名称付しているのはダメージを与える当事者がpinokoのため
+        $pinoko_use_skill = $pinoko->skills[$pinoko_rand];
+        $pinoko_damage = $pinoko_use_skill["damage"];
+        $player_hp = $player->hp - $pinoko_damage;
+        $player->setHp($player_hp);
+        $_COOKIE["player"] = $player;
+    }
+
+    if (!isset($_SESSION["pinoko"])) {
+        //オブジェクト型をSESSIONへ代入する際は必ず
+        //serialize化しないと入らない
+        $_SESSION["pinoko"] = serialize($pinoko);
+    } else {
+        //$pinoko->skills)-2はスキル配列内のpinokoの技だけに限定するため
+        $pinoko_rand = rand(0, count($pinoko->skills)-2);
+        $pinoko = unserialize($_SESSION["pinoko"]);
+        $pinoko_use_skill = $pinoko->skills[$pinoko_rand];
+        $damage = $use_skill["damage"];
+        $pinoko_hp = $pinoko->hp - $damage;
+        $pinoko->setHp($pinoko_hp);
+        $_SESSION["pinoko"] = serialize($pinoko);
+    }
 
     if ($_REQUEST["attack"]) {
         $strike_text = attack($player, $pinoko);
         $enemy_strike_text = enemy_attack($player, $pinoko);
+        $check = error_log(print_r($_SESSION["pinoko"], true));
     } else {
         $strike_text = "$pinoko->name がおそいかかってきた!!!";
     }
@@ -60,7 +87,15 @@ function get($player, $pinoko)
     return array(
         "strike_text" => $strike_text,
         "enemy_strike_text" => $enemy_strike_text,
-        "pinoko_hp" => $_SESSION["hp"],
-        "array_detail" => $skill
+        "pinoko_hp" => "ピノコの現在HP:".$pinoko->hp,
+        "player_hp" => "ひろしの現在HP:".$player->hp,
+        "array_detail" => $skills
     );
 }
+
+
+
+ /**
+ * 最終的な攻撃シーンを作成する。
+ * 状況ごとに攻撃を行う確率を分ける
+ */
