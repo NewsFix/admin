@@ -8,21 +8,17 @@ function attack($player, $pinoko)
 {
     $rand = rand(50, 200);
 
+    return text_of_attack_by_player($player->name, $pinoko->name, $rand)
+}
 
-    //乱数を文字化するための目的
+function text_of_attack_by_player($player_name, $pinoko_name, $damage)
+{
+    // 乱数の値を文字化
+    $damage_text = mb_convert_kana(strval($damage), "N");
+    $player_text = $player_name. "はファイアを唱えた!!!";
+    $pinoko_text = $pinoko_name. "に" . $damage . " のダメージを与えた!!";
 
-    $rand = strval($rand);
-    $rand = mb_convert_kana($rand, "N");
-
-
-    //主人公側の攻撃表示
-
-
-    $player_text1 = $player->name. "はファイアを唱えた!!!";
-
-    $player_text2 = $pinoko->name."に".$rand ." のダメージを与えた!!";
-
-    return $player_text1 . $player_text2;
+    return $player_text . $pinoko_text
 }
 
 
