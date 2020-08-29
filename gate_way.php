@@ -9,8 +9,8 @@ $skills = $skillClass->get();
 
 $player = new Char(
     "たけし",
-    1000,
-    1000,
+    500,
+    500,
     $skills
 );
 

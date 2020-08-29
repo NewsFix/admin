@@ -55,7 +55,7 @@ class Skills
           [
             "name" => "解剖手術",
             "addHP"=> 0,
-            "damage"=> 10000,
+            "damage"=> 10,
             "useMP" => 0,
             "text" => "解剖した",
           ],
