@@ -11,14 +11,14 @@ function attack($player, $pinoko)
     return text_of_attack_by_player($player->name, $pinoko->name, $damage);
 }
 
-function text_of_attack_by_player($player_name, $pinoko_name, $damage)
+function text_of_attack_by_player($player_name, $enemy_name, $damage)
 {
     // 乱数の値を文字化
     $damage_text = mb_convert_kana(strval($damage), "N");
     $player_text = $player_name . "はファイアを唱えた!!!";
-    $pinoko_text = $pinoko_name . "に" . $damage_text . " のダメージを与えた!!";
+    $enemy_text = $enemy_name . "に" . $damage_text . " のダメージを与えた!!";
 
-    return $player_text . $pinoko_text;
+    return $player_text . $enemy_text;
 }
 
 
