@@ -45,21 +45,34 @@ function enemy_attack($player, $pinoko)
 
 function get($player, $pinoko)
 {
+    $pinoko_rand = rand(0, count($pinoko->skills)-2);
     $strike_text = "";
     $enemy_strike_text = "";
     //$_SESSION["pinoko"] = serialize($pinoko);
+
+    if (!isset($_COOKIE["player"])) {
+        setcookie("player", $player);
+    } else {
+        //$pinokoで名称付しているのはダメージを与える当事者がpinokoのため
+        $pinoko_use_skill = $pinoko->skills[$pinoko_rand];
+        $pinoko_damage = $pinoko_use_skill["damage"];
+        $player_hp = $player->hp - $pinoko_damage;
+        $player->setHp($player_hp);
+        $_COOKIE["player"] = $player;
+    }
 
     if (!isset($_SESSION["pinoko"])) {
         //オブジェクト型をSESSIONへ代入する際は必ず
         //serialize化しないと入らない
         $_SESSION["pinoko"] = serialize($pinoko);
     } else {
-        $rand = rand(0, count($pinoko->skills));
+        //$pinoko->skills)-2はスキル配列内のpinokoの技だけに限定するため
+        $pinoko_rand = rand(0, count($pinoko->skills)-2);
         $pinoko = unserialize($_SESSION["pinoko"]);
-        $use_skill = $pinoko->skills[$rand];
+        $pinoko_use_skill = $pinoko->skills[$pinoko_rand];
         $damage = $use_skill["damage"];
-        $hp = $pinoko->hp - $damage;
-        $pinoko->setHp($hp);
+        $pinoko_hp = $pinoko->hp - $damage;
+        $pinoko->setHp($pinoko_hp);
         $_SESSION["pinoko"] = serialize($pinoko);
     }
 
@@ -74,7 +87,8 @@ function get($player, $pinoko)
     return array(
         "strike_text" => $strike_text,
         "enemy_strike_text" => $enemy_strike_text,
-        "pinoko_hp" => $pinoko->hp,
+        "pinoko_hp" => "ピノコの現在HP:".$pinoko->hp,
+        "player_hp" => "ひろしの現在HP:".$player->hp,
         "array_detail" => $skills
     );
 }
