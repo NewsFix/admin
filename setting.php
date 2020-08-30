@@ -12,5 +12,9 @@
      private object $set3;
      private object $set4;
 
-     public function __construct()
+     public function __construct($set1 = null,$set2 = null,$set3 = null,$set4 = null,)
+     {
+
+
+     }
  }
