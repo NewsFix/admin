@@ -118,7 +118,7 @@ function get($player, $pinoko)
     if ($_REQUEST["attack"]) {
         $strike_text = attack($player, $pinoko);
         $enemy_strike_text = enemy_attack($player, $pinoko);
-        $check = error_log(print_r($_SESSION["pinoko"], true));
+        error_log(print_r($_SESSION["pinoko"], true));
     } else {
         $strike_text = "$pinoko->name がおそいかかってきた!!!";
     }
