@@ -21,10 +21,8 @@ $pinoko = new Char(
     $skills
 );
 
-
-
-
 require_once("command.php");
 
+$command = new Command();
 
-echo json_encode(get($player, $pinoko));
+echo json_encode($command->get($player, $pinoko));
