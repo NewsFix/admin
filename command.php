@@ -6,50 +6,7 @@ require_once('battle/text.php');
 // 戦闘テキストを管理するClass
 use Battle\Text;
 
-/**
- * 主人公側の攻撃
- *
- * @param object $player
- * @param object $pinoko
- * @return string 主人公の戦闘コメント結果
- */
-function attack($player, $pinoko)
-{
-    // TODO: 一時的な仮置きダメージ
-    $rand = rand(50, 200);
 
-    $textCreate = new Battle\Text();
-    //主人公側の攻撃表示
-    $skill_text = $textCreate->useSkillText($player->name, 'ファイアを唱えた!!!');
-    $damage_text = $textCreate->damageText($pinoko->name, $rand);
-
-    return $skill_text . $damage_text;
-}
-
-/**
- * 敵側の攻撃
- *
- * @param object $player
- * @param object $pinoko
- * @return string 敵側の戦闘コメント結果
- */
-function enemy_attack($player, $pinoko)
-{
-    /*
-    * skills.php内で定義しているスキルの配列内容にrandを
-    * 定義してあるので使用
-    */
-    $damage = $pinoko->skills[0]['damage'];
-
-    $textCreate = new Battle\Text();
-    /*
-    * skills.php内で定義しているスキルの配列内容にスキル* textを定義してあるので使用
-    */
-    $skill_text = $textCreate->useSkillText($pinoko->name, $pinoko->skills[0]['text']);
-    $damage_text = $textCreate->damageText($player->name, $damage);
-
-    return $skill_text . $damage_text;
-}
 
 /**
  * 主人公と敵側のHP,MPの加算減算処理
@@ -112,23 +69,62 @@ function get($player, $pinoko)
         $_SESSION["pinoko"] = serialize($pinoko);
     }
 
-    /**
-     * POST取得をトリガーに戦闘コメントの変数代入
-     */
-    if ($_REQUEST["attack"]) {
-        $strike_text = attack($player, $pinoko);
-        $enemy_strike_text = enemy_attack($player, $pinoko);
-        error_log(print_r($_SESSION["pinoko"], true));
-    } else {
-        $strike_text = "$pinoko->name がおそいかかってきた!!!";
-    }
+    // 戦闘表示テキストの取得
+    $strike_text = getStrikeTexts($player, $pinoko, isset($_REQUEST["attack"]));
 
+    $skills = null; // TODO: 使われて無さそうだけど初期化されてなかったからやった
     //取得した戦闘コメント、更新された各オブジェクトのHPプロパティを配列化して返す。呼び出しはgate_way.phpより行う。
     return array(
-        "strike_text" => $strike_text,
-        "enemy_strike_text" => $enemy_strike_text,
+        "strike_text" => $strike_text['player'],
+        "enemy_strike_text" => $strike_text['enemy'],
         "pinoko_hp" => "ピノコの現在HP:".$pinoko->hp,
         "player_hp" => "ひろしの現在HP:".$player->hp,
         "array_detail" => $skills
     );
+}
+
+/**
+ * 戦闘テキストをまとめて取得するロジック
+ *
+ * @param Object $player Player class
+ * @param Object $enemy Enemy class
+ * @return Array playerとenemyの戦闘テキスト
+ */
+function getStrikeTexts($player, $enemy, $is_first)
+{
+    $player_strike_text = '';
+    $enemy_strike_text = '';
+    /**
+     * POST取得をトリガーに戦闘コメントの変数代入
+     */
+    if ($is_first) {
+        $player_strike_text = attackText($player->name, 'ファイアを唱えた!!!', $enemy->name, rand(50, 200));
+        $enemy_strike_text = attackText($enemy->name, $enemy->skills[0]['text'], $player->name, $enemy->skills[0]['damage']);
+    } else {
+        $player_strike_text = "$enemy->name がおそいかかってきた!!!";
+    }
+
+    return array(
+        'player' => $player_strike_text,
+        'enemy' => $enemy_strike_text,
+    );
+}
+
+/**
+ * 攻撃テキストの生成共通部分
+ *
+ * @param String $turn_char_name このターンメインで攻撃するキャラクタ名
+ * @param String $use_skill 攻撃キャラが使うスキル名
+ * @param object $target_char_name 攻撃を受けるキャラ名
+ * @param Int    $damage ダメージ
+ * @return string 主人公の戦闘コメント結果
+ */
+function attackText($turn_char_name, $use_skill, $target_char_name, $damage=0)
+{
+    $textCreate = new Battle\Text();
+    //主人公側の攻撃表示
+    $skill_text = $textCreate->useSkillText($turn_char_name, $use_skill);
+    $damage_text = $textCreate->damageText($target_char_name, $damage);
+
+    return $skill_text . $damage_text;
 }

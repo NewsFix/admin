@@ -12,7 +12,7 @@ class Text
      * @param Int    $damage ダメージ
      * @return String ダメージ表記テキスト
      */
-    public function useSkillText(String $skill_user, String $skill): String
+    public function useSkillText(String $skill_user, String $skill_text): String
     {
         return $skill_user. 'は'. $skill_text; // をXXしたをさらに分離してもよさそう
     }
