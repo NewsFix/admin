@@ -1,8 +1,10 @@
 <?php
 session_start();
 
-//攻撃乱数が出来上がるまでの参考として以下を残しておく
-//主人公、敵側の関数内容に一貫性がない。修正必要
+require_once('battle/text.php');
+
+// 戦闘テキストを管理するClass
+use Battle\Text;
 
 /**
  * 主人公側の攻撃
@@ -13,18 +15,15 @@ session_start();
  */
 function attack($player, $pinoko)
 {
+    // TODO: 一時的な仮置きダメージ
     $rand = rand(50, 200);
 
-    //乱数のキャストをstringに変換。
-    //最終的に渡すコメントの型を統一するため
-    $rand = strval($rand);
-    $rand = mb_convert_kana($rand, "N");
-
+    $textCreate = new Battle\Text();
     //主人公側の攻撃表示
-    $player_text1 = $player->name. "はファイアを唱えた!!!";
-    $player_text2 = $pinoko->name."に".$rand ." のダメージを与えた!!";
+    $skill_text = $textCreate->useSkillText($player->name, 'ファイアを唱えた!!!');
+    $damage_text = $textCreate->damageText($pinoko->name, $rand);
 
-    return $player_text1 . $player_text2;
+    return $skill_text . $damage_text;
 }
 
 /**
@@ -40,22 +39,16 @@ function enemy_attack($player, $pinoko)
     * skills.php内で定義しているスキルの配列内容にrandを
     * 定義してあるので使用
     */
-    $rand = $pinoko->skills[0]['damage'];
+    $damage = $pinoko->skills[0]['damage'];
 
-    //乱数のキャストをstringに変換。
-    //最終的に渡すコメントの型を統一するため
-    $rand = strval($rand);
-    $rand = mb_convert_kana($rand, "N");
-
+    $textCreate = new Battle\Text();
     /*
     * skills.php内で定義しているスキルの配列内容にスキル* textを定義してあるので使用
     */
-    $pinoko_text1 = $pinoko->name. "は".
-    $pinoko->skills[0]['text'];
+    $skill_text = $textCreate->useSkillText($pinoko->name, $pinoko->skills[0]['text']);
+    $damage_text = $textCreate->damageText($player->name, $damage);
 
-    $pinoko_text2 = $player->name."に".$rand ." のダメージを与えた!!";
-
-    return $pinoko_text1 . $pinoko_text2;
+    return $skill_text . $damage_text;
 }
 
 /**
