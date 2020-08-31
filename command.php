@@ -24,27 +24,44 @@ class Command
      */
     public function get($player, $pinoko)
     {
-        $save = new Battle\SaveData();
 
         //使用するスキルは乱数発生
-        $player_use_skill = rand(2, count($pinoko->skills)-1);
-        $pinoko_use_skill = rand(0, count($pinoko->skills)-2);
+        $player_use_skill_id = rand(2, count($player->skills)-1);
+        $pinoko_use_skill_id = rand(0, count($pinoko->skills)-2);
 
         // Objectの更新とcokkieセット
-        $player = $this->updateCharStatus('player', $player, $pinoko->skills, $pinoko_use_skill);
-        $pinoko = $this->updateCharStatus('pinoko', $pinoko, $player->skills, $player_use_skill);
+        $player = $this->updateCharStatus('player', $player, $pinoko->skills, $pinoko_use_skill_id);
+        $pinoko = $this->updateCharStatus('pinoko', $pinoko, $player->skills, $player_use_skill_id);
+
+        $player_death = $this->deathCheck($player->skill[$player_use_skill_id]);
+        $pinoko_death = $this->deathCheck($pinoko->skill[$pinoko_use_skill_id]);
+
 
         // attackがない場合は初回である
         $is_first = !isset($_REQUEST["attack"]) ? true: false;
         // 戦闘表示テキストの取得
-        $strike_text = $this->getStrikeTexts($player, $pinoko, $pinoko_use_skill, $is_first);
+        $strike_text = $this->getStrikeTexts($player, $pinoko, $player_use_skill_id, $pinoko_use_skill_id, $is_first);
+
+        $player_status = array(
+            "name" => $player->name,
+            "hp" => $player->hp,
+            "mp"=>$player->mp,
+            "death"=>false,
+        );
+        $pinoko_status = array(
+            "name" => $pinoko->name,
+            "hp" => $pinoko->hp,
+            "mp"=>$pinoko->mp,
+            "death"=>false,
+        );
 
         //取得した戦闘コメント、更新された各オブジェクトのHPプロパティを配列化して返す。呼び出しはgate_way.phpより行う。
         return array(
             "strike_text" => $strike_text['player'],
             "enemy_strike_text" => $strike_text['enemy'],
-            "pinoko_hp" => "ピノコの現在HP:".$pinoko->hp,
-            "player_hp" => "ひろしの現在HP:".$player->hp,
+            "pinoko" => $pinoko_status,
+            "player" => $player_status,
+            //"player_hp" => "HP:".$player->hp,
             "array_detail" => null // TODO: 使われて無さそう
         );
     }
@@ -57,7 +74,7 @@ class Command
      * @param Int    $use_skill_id 使用されるスキルID
      * @return Object 更新したキャラクター
      */
-    private function updateCharStatus(String $char_name, $char, Array $skills, Int $use_skill_id)
+    private function updateCharStatus(String $char_name, $char, array $skills, Int $use_skill_id)
     {
         // SaveDataクラスは毎回インスタンス化されるけど一旦これで
         $save = new Battle\SaveData();
@@ -84,9 +101,9 @@ class Command
      * @param Object $enemy Enemy class
      * @return Array playerとenemyの戦闘テキスト
      */
-    private function getStrikeTexts($player, $enemy, $enemy_use_skill_id, $is_first)
+    private function getStrikeTexts($player, $enemy, $player_use_skill_id, $enemy_use_skill_id, $is_first)
     {
-        $textGemerator = new Battle\Text();
+        $textGenerator = new Battle\Text();
 
         $player_text = '';
         $enemy_text = '';
@@ -95,13 +112,18 @@ class Command
         if ($is_first) {
             $player_text = "$enemy->name がおそいかかってきた!!!";
         } else {
-            $player_text = $textGemerator->attackText($player->name, 'ファイアを唱えた!!!', $enemy->name, rand(50, 200));
-            $enemy_text = $textGemerator->attackText($enemy->name, $enemy->skills[0]['text'], $player->name, $enemy->skills[$enemy_use_skill_id]['damage']);
+            $player_text = $textGenerator->attackText($player->name, $player->skills[$player_use_skill_id]['text'], $enemy->name, $player->skills[$player_use_skill_id]['damage']);
+            $enemy_text = $textGenerator->attackText($enemy->name, $enemy->skills[$enemy_use_skill_id]['text'], $player->name, $enemy->skills[$enemy_use_skill_id]['damage']);
         }
 
         return array(
             'player' => $player_text,
             'enemy' => $enemy_text,
         );
+    }
+
+    public function deathCheck($charskill)
+    {
+        return $charskill["death"];
     }
 }

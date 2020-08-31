@@ -13,7 +13,7 @@ class Text
      * @param Int    $damage ダメージ
      * @return string 主人公の戦闘コメント結果
      */
-    public function attackText($turn_char_name, $use_skill, $target_char_name, $damage)
+    public function attackText($turn_char_name, $use_skill, $target_char_name, $damage):String
     {
         $skill_text = $this->useSkillText($turn_char_name, $use_skill);
         $damage_text = $this->damageText($target_char_name, $damage);
@@ -24,8 +24,8 @@ class Text
     /**
      * バトルのスキル使用表記
      *
-     * @param String $target 攻撃対象
-     * @param Int    $damage ダメージ
+     * @param String $skill_user 攻撃者
+     * @param Int    $skill_text スキルテキスト
      * @return String ダメージ表記テキスト
      */
     private function useSkillText(String $skill_user, String $skill_text): String
@@ -46,4 +46,3 @@ class Text
         return $target. 'に' .mb_convert_kana(strval($damage), 'N'). ' のダメージを与えた!!';
     }
 }
-

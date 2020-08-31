@@ -99,6 +99,8 @@
 
             var pinoko_value = document.getElementById('enemy_status');
 
+            var player_value = document.getElementById('player_status');
+
             var player_hp = document.getElementById('player_hp');
 
             var player_mp = document.getElementById('player_mp');
@@ -111,12 +113,14 @@
 
               var data = JSON.parse(req.responseText);
 
+              const current_player_hp = "現在" + data.player.name + "のHP:" + data.player.hp;
+              const current_enemy_hp = "現在" + data.pinoko.name + "のHP:" + data.pinoko.hp;
               //JSON.parse処理が完了しているので、以下phpファイルで定義した各変数が使用可能となっている
-
               result.innerHTML = data.strike_text;
-              pinoko_value.innerHTML = data.pinoko_hp;
-              player_hp.innerHTML = data.player_hp;
-              player_mp.innerHTML = data.player_mp;
+              pinoko_value.innerHTML = current_enemy_hp;
+              player_value.innerHTML = current_player_hp;
+              player_hp.innerHTML = data.player.hp;
+              player_mp.innerHTML = data.player.mp;
 
               //敵側のテキストを攻撃者と同じ"id=result"タグ内に挿入するためsetTimeoutにて時間差をつけている。
               //クロージャ入り変数の仕組みは単に上記のinnerHTMLと同じ。

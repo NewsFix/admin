@@ -15,7 +15,7 @@ class SaveData
      * @param $expire cookieの期限
      * @return void
      */
-    public function cookie($key, $value, $expire = 60*60)
+    public function cookie($key, $value, $expire = 60*60):void
     {
         // 値をセットするためにkeyが存在する場合はまず消す
         if (isset($_COOKIE[$key])) {
@@ -23,7 +23,6 @@ class SaveData
         }
         // 実際にセットする
         setcookie($key, $value, time()+$expire, "/");
-
     }
     /**
      * MEMO: setcookie()は
@@ -32,5 +31,4 @@ class SaveData
      * 第三パラメータ:有効期限(グリニッジ標準)
      * 第四パラメータ:使用可能なルートの設定
      */
-
 }

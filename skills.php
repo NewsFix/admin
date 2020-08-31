@@ -50,6 +50,7 @@ class Skills
             "damage"=> $this->randomDamage(50, 100),
             "useMP" => 0,
             "text" => "お注射をねじ込んだ!!",
+            "death" => false,
           ],
 
           [
@@ -58,6 +59,7 @@ class Skills
             "damage"=> 10,
             "useMP" => 0,
             "text" => "解剖した",
+            "death" => true,
           ],
 
           [
@@ -66,6 +68,7 @@ class Skills
             "damage"=> $this->randomDamage(30, 60),
             "useMP" => 0,
             "text" => "を強烈にカツアゲした!!",
+            "death" => false,
           ],
 
           [
@@ -74,6 +77,7 @@ class Skills
             "damage"=> $this->randomDamage(50, 100),
             "useMP" => 0,
             "text" => "闇夜を切り裂いた!!",
+            "death" => true,
           ],
         ];
     }
