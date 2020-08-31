@@ -1,20 +1,24 @@
 <?php
-session_start();
 
+/**
+ * AJAXを利用し、全てのPHPファイルをbattle.php内のformを
+ * トリガーにこちらから送信する仕組みになっている。
+ *
+ * char.php:各キャラのクラスが定義されている
+ * skills.php:各キャラの全スキルが配列で定義されている
+ */
 require_once("char.php");
 require_once("skills.php");
 
 $skillClass = new Skills();
-$skill1 = $skillClass->getById(1);
-$skill2 = $skillClass->getById(2);
+$skills = $skillClass->get();
 
-$skills = array($skill1,$skill2);
 
 $player = new Char(
     "たけし",
-    1000,
-    1000,
-   //$skill
+    500,
+    500,
+    $skills
 );
 
 $pinoko = new Char(
@@ -26,4 +30,6 @@ $pinoko = new Char(
 
 require_once("command.php");
 
-echo json_encode(get($player, $pinoko));
+$command = new Command();
+
+echo json_encode($command->get($player, $pinoko));

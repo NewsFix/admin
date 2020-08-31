@@ -10,9 +10,9 @@ class Skills
      * skillsメソッド内にある配列を取得するため
      *
      * @param void
-     * @return array
+     * @return array スキルの入った配列を返す
      */
-    private function get():array
+    public function get():array
     {
         return $this->createSkills();
     }
@@ -22,9 +22,9 @@ class Skills
      * 取得できない場合は空の配列が返る
      *
      * @param integer $skillID
-     * @return array
+     * @return array 任意のIDを指定して任意のスキルを取得
      */
-    public function getById($skillID)
+    public function getById(int $skillID):array
     {
         $skills = $this->get();
 
@@ -39,30 +39,46 @@ class Skills
      * 全てのスキルを配列形式で格納してあるメソッド
      *
      * @param void
-     * @return array
+     * @return array 全キャラのスキルを返す
      */
-    private function createSkills()
+    private function createSkills():array
     {
         return [
-          001 => [
+          [
             "name" => "お注射",
             "addHP"=> 0,
             "damage"=> $this->randomDamage(50, 100),
             "useMP" => 0,
             "text" => "お注射をねじ込んだ!!",
-            "percent" => 30
+            "death" => false,
           ],
 
-          002 => [
+          [
             "name" => "解剖手術",
             "addHP"=> 0,
-            "damage"=> 10000,
+            "damage"=> 10,
             "useMP" => 0,
             "text" => "解剖した",
-            "percent" => 30
+            "death" => true,
           ],
 
+          [
+            "name" => "カツアゲ",
+            "addHP"=> 0,
+            "damage"=> $this->randomDamage(30, 60),
+            "useMP" => 0,
+            "text" => "を強烈にカツアゲした!!",
+            "death" => false,
+          ],
 
+          [
+            "name" => "カッティングエッジ!",
+            "addHP"=> 0,
+            "damage"=> $this->randomDamage(50, 100),
+            "useMP" => 0,
+            "text" => "闇夜を切り裂いた!!",
+            "death" => true,
+          ],
         ];
     }
 
@@ -71,9 +87,9 @@ class Skills
      *
      * @param integer $min
      * @param integer $max
-     * @return integer
+     * @return integer 任意の引数で乱数の加減上限設定
      */
-    private function randomDamage($min, $max)
+    private function randomDamage(int $min, int $max):int
     {
         return rand($min, $max);
     }
