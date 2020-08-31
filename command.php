@@ -9,7 +9,6 @@ use Battle\Text;
 // データセーブを管理するClass
 use Battle\SaveData;
 
-
 class Command
 {
     /**
@@ -77,6 +76,7 @@ class Command
         // 更新済みObjectを返す
         return $char;
     }
+
     /**
      * 戦闘テキストをまとめて取得するロジック
      *

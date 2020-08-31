@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * AJAXを利用し、全てのPHPファイルをbattle.php内のformを
+ * トリガーにこちらから送信する仕組みになっている。
+ *
+ * char.php:各キャラのクラスが定義されている
+ * skills.php:各キャラの全スキルが配列で定義されている
+ */
 require_once("char.php");
 require_once("skills.php");
 
