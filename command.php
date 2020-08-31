@@ -11,7 +11,7 @@ session_start();
  * @param object $pinoko
  * @return string 主人公の戦闘コメント結果
  */
-function attack($player, $pinoko)
+function attack(object $player, object $pinoko):string
 {
     $rand = rand(50, 200);
 
@@ -34,7 +34,7 @@ function attack($player, $pinoko)
  * @param object $pinoko
  * @return string 敵側の戦闘コメント結果
  */
-function enemy_attack($player, $pinoko)
+function enemy_attack(object $player, object $pinoko):string
 {
     /*
     * skills.php内で定義しているスキルの配列内容にrandを
@@ -69,11 +69,8 @@ function enemy_attack($player, $pinoko)
  * @param object $pinoko
  * @return array 敵味方コメントとHP
  */
-function get($player, $pinoko)
+function get(object $player, object $pinoko):array
 {
-    //count内のskill配列には全キャラスキルが格納されているためスキル乱数発生の際はキャラ毎のスキル範囲を指定する必要あり。
-    $pinoko_rand = rand(0, count($pinoko->skills)-2);
-
     $strike_text = "";
     $enemy_strike_text = "";
 
@@ -90,6 +87,10 @@ function get($player, $pinoko)
     if (!isset($_COOKIE["player_hp"])) {
         setcookie("player_hp", $player->hp, time()+60*60, "/");
     } else {
+        //count内のskill配列には全キャラスキルが格納されているためスキル乱数発生の際はキャラ毎のスキル範囲を指定する必要あり。
+        $pinoko_rand = rand(0, count($pinoko->skills)-2);
+
+
         //敵側が使用するスキルは乱数発生
         //データ保持にCOOKIEを使用する場合は一旦COOKIE削除処理を行い、空ににした後に更新されたプロパティをCOOKIEに再セットする
         $player->hp = $_COOKIE["player_hp"];
@@ -108,7 +109,7 @@ function get($player, $pinoko)
     if (!isset($_SESSION["pinoko"])) {
         $_SESSION["pinoko"] = serialize($pinoko);
     } else {
-        $player_rand = rand(2, count($pinoko->skills)-1);
+        $player_rand = rand(2, count($player->skills)-1);
         $pinoko = unserialize($_SESSION["pinoko"]);
         $player_use_skill = $player->skills[$player_rand];
         $player_damage = $player_use_skill["damage"];
@@ -135,7 +136,8 @@ function get($player, $pinoko)
         "strike_text" => $strike_text,
         "enemy_strike_text" => $enemy_strike_text,
         "pinoko_hp" => "ピノコの現在HP:".$pinoko->hp,
-        "player_hp" => "ひろしの現在HP:".$player->hp,
+        "player_hp" => "HP:".$player->hp,
+        "player_mp" => "MP:".$player->mp,
         "array_detail" => $skills
     );
 }

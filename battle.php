@@ -44,9 +44,9 @@
           <div class="d-flex party">
             <div class="main-char">
             <ul>
-              <li>ひろし</li>
-              <li>HP:１００</li>
-              <li>MP:１００</li>
+              <li id="player_name">ひろし</li>
+              <li id="player_hp"></li>
+              <li id="player_mp"></li>
               <li>職業:平民</li>
             </ul>
             </div>
@@ -99,7 +99,9 @@
 
             var pinoko_value = document.getElementById('enemy_status');
 
-            var player_value = document.getElementById('player_status');
+            var player_hp = document.getElementById('player_hp');
+
+            var player_mp = document.getElementById('player_mp');
 
             if(req.status == 200){
 
@@ -113,7 +115,8 @@
 
               result.innerHTML = data.strike_text;
               pinoko_value.innerHTML = data.pinoko_hp;
-              player_value.innerHTML = data.player_hp;
+              player_hp.innerHTML = data.player_hp;
+              player_mp.innerHTML = data.player_mp;
 
               //敵側のテキストを攻撃者と同じ"id=result"タグ内に挿入するためsetTimeoutにて時間差をつけている。
               //クロージャ入り変数の仕組みは単に上記のinnerHTMLと同じ。

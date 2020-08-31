@@ -10,7 +10,7 @@ class Skills
      * skillsメソッド内にある配列を取得するため
      *
      * @param void
-     * @return array
+     * @return array スキルの入った配列を返す
      */
     public function get():array
     {
@@ -22,9 +22,9 @@ class Skills
      * 取得できない場合は空の配列が返る
      *
      * @param integer $skillID
-     * @return array
+     * @return array 任意のIDを指定して任意のスキルを取得
      */
-    public function getById($skillID)
+    public function getById(int $skillID):array
     {
         $skills = $this->get();
 
@@ -39,9 +39,9 @@ class Skills
      * 全てのスキルを配列形式で格納してあるメソッド
      *
      * @param void
-     * @return array
+     * @return array 全キャラのスキルを返す
      */
-    private function createSkills()
+    private function createSkills():array
     {
         return [
           [
@@ -75,8 +75,6 @@ class Skills
             "useMP" => 0,
             "text" => "闇夜を切り裂いた!!",
           ],
-
-
         ];
     }
 
@@ -85,9 +83,9 @@ class Skills
      *
      * @param integer $min
      * @param integer $max
-     * @return integer
+     * @return integer 任意の引数で乱数の加減上限設定
      */
-    private function randomDamage($min, $max)
+    private function randomDamage(int $min, int $max):int
     {
         return rand($min, $max);
     }
