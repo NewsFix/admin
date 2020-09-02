@@ -50,7 +50,7 @@ class Skills
             "damage"=> $this->randomDamage(50, 100),
             "useMP" => 0,
             "text" => "お注射をねじ込んだ!!",
-            "death" => false,
+            "death" => isDead(0),
           ],
 
           [
@@ -59,7 +59,7 @@ class Skills
             "damage"=> 10,
             "useMP" => 0,
             "text" => "解剖した",
-            "death" => true,
+            "death" => isDead(10),
           ],
 
           [
@@ -68,7 +68,7 @@ class Skills
             "damage"=> $this->randomDamage(30, 60),
             "useMP" => 0,
             "text" => "を強烈にカツアゲした!!",
-            "death" => false,
+            "death" => isDead(0),
           ],
 
           [
@@ -77,7 +77,7 @@ class Skills
             "damage"=> $this->randomDamage(50, 100),
             "useMP" => 0,
             "text" => "闇夜を切り裂いた!!",
-            "death" => true,
+            "death" => isDead(20),
           ],
         ];
     }
@@ -92,5 +92,15 @@ class Skills
     private function randomDamage(int $min, int $max):int
     {
         return rand($min, $max);
+    }
+
+    /**
+     * 死判定
+     * @param integer $rate
+     */
+    private function isDead(int $rate):bool
+    {
+      var $num = rand(0, 100)
+      return $num < $rate ? true : false
     }
 }
