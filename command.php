@@ -78,8 +78,7 @@ class Command
 
             // HP 0以下ならキャラクターの死亡状態にtrue（死亡）をセット
             // ついでに0以下にならないように$hpに0をセット
-            if (0 <= $hp && $char->death === false) { // すでに死んでいたら処理しない
-                // キャラクタがHP0で死んだかどうかをセットする
+            if (0 <= $hp && false) { //TODO: たぶんcookieにHPマイナスで入ってるからfalseにしておく
                 $char->setDeath(true);
             }
 
@@ -133,12 +132,12 @@ class Command
      * @param Bool $skillDeath 利用されたスキルが即死か否か true = 即死スキル
      * @return Bool true = 死亡 false = 死んでいない
      */
-    private function checkDeath(Bool $skillDeath): bool
+    private function checkDeath(Bool $skillDeath, $rate = 2): bool
     {
         // trueが来ても即死させない、10分の1で死ぬ確率
-        $probability = rand(1, 10);
+        $probability = rand(1, 2);
         // 即死技かつランダム値が10のときはtrueを返す
-        if ($skillDeath && 10 === $probability) {
+        if ($skillDeath && $rate === $probability) {
             return true;
         }
 
