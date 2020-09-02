@@ -33,9 +33,6 @@ class Command
         $player = $this->updateCharStatus('player', $player, $pinoko->skills, $pinoko_use_skill_id);
         $pinoko = $this->updateCharStatus('pinoko', $pinoko, $player->skills, $player_use_skill_id);
 
-        // player, pinokoが即死したかどうかをセットする
-        $player->setDeath($this->deathCheck($player->skills[$player_use_skill_id]));
-        $pinoko->setDeath($this->deathCheck($pinoko->skills[$pinoko_use_skill_id]));
 
         // attackがない場合は初回である
         $is_first = !isset($_REQUEST["attack"]) ? true: false;
@@ -76,12 +73,21 @@ class Command
             // HPのダメージ計算
             $hp = $char->hp - $damage;
 
+            // キャラクタが即死したかどうかをセットする
+            $char->setDeath($this->checkDeath($skills[$use_skill_id]["death"]));
+
             // HP 0以下ならキャラクターの死亡状態にtrue（死亡）をセット
             // ついでに0以下にならないように$hpに0をセット
-            if (0 <= $hp) {
+            if (0 <= $hp && $char->death === false) { // すでに死んでいたら処理しない
+                // キャラクタがHP0で死んだかどうかをセットする
                 $char->setDeath(true);
+            }
+
+            // 死んでいたらHPを0にセット
+            if ($char->death) {
                 $hp = 0;
             }
+
             // キャラクターオブジェクトのHPを更新
             $char->setHp($hp);
             // キャラクターのHPをcookieにセット
@@ -121,20 +127,19 @@ class Command
 
     /**
      * 即死か否かを管理
+     * TODO:  確率とかはここで書いていく もしスキルごとに確率が違うのであれば
+     *        Skillsに確率最大値を書いておいて、引数に持ってくる
      *
-     * @param Array $skill
+     * @param Bool $skillDeath 利用されたスキルが即死か否か true = 即死スキル
      * @return Bool true = 死亡 false = 死んでいない
      */
-    private function deathCheck(Array $skill): bool
+    private function checkDeath(Bool $skillDeath): bool
     {
-        // deathを持っていない場合は処理しない
-        if (isset($skill["death"])) {
-            // trueが来ても即死させない、10分の1で死ぬ確率
-            $probability = rand(1, 10);
-            // 即死技かつランダム値が10のときはtrueを返す
-            if ($skill["death"] && 10 === $probability) {
-                return true;
-            }
+        // trueが来ても即死させない、10分の1で死ぬ確率
+        $probability = rand(1, 10);
+        // 即死技かつランダム値が10のときはtrueを返す
+        if ($skillDeath && 10 === $probability) {
+            return true;
         }
 
         return false;
