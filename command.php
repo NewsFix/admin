@@ -77,8 +77,7 @@ class Command
             $char->setDeath($this->checkDeath($skills[$use_skill_id]["death"]));
 
             // HP 0以下ならキャラクターの死亡状態にtrue（死亡）をセット
-            // ついでに0以下にならないように$hpに0をセット
-            if (0 <= $hp && false) { //TODO: たぶんcookieにHPマイナスで入ってるからfalseにしておく
+            if (0 >= $hp && false) { //TODO: たぶんcookieにHPマイナスで入ってるからfalseにしておく
                 $char->setDeath(true);
             }
 
