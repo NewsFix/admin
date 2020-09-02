@@ -37,8 +37,6 @@ class Command
         $player->setDeath($this->deathCheck($player->skills[$player_use_skill_id]));
         $pinoko->setDeath($this->deathCheck($pinoko->skills[$pinoko_use_skill_id]));
 
-
-
         // attackがない場合は初回である
         $is_first = !isset($_REQUEST["attack"]) ? true: false;
         // 戦闘表示テキストの取得
