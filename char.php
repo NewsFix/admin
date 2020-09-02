@@ -11,6 +11,7 @@ class Char
     public int $hp;
     public int $mp;
     public array $skills;
+    public bool $dead;
 
     public function __construct(string $name, int $hp, int $mp, array $skills = [])
     {
@@ -30,5 +31,10 @@ class Char
     public function setHp(int $hp):void
     {
         $this->hp = $hp;
+    }
+
+    public function setDead(bool $is_dead):void
+    {
+        %this->dead = $is_dead;
     }
 }
