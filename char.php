@@ -11,6 +11,7 @@ class Char
     public int $hp;
     public int $mp;
     public array $skills;
+    public bool $death;
 
     public function __construct(string $name, int $hp, int $mp, array $skills = [])
     {
@@ -18,7 +19,7 @@ class Char
         $this->hp = $hp;
         $this->mp = $mp;
         $this->skills = $skills;
-        $this->isDeath = false; // 死の状態デフォルトfalseだから引数には入れていない
+        $this->death = false; // 死の状態デフォルトfalseだから引数には入れていない
     }
 
     /**
