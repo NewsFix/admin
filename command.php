@@ -33,34 +33,18 @@ class Command
         $player = $this->updateCharStatus('player', $player, $pinoko->skills, $pinoko_use_skill_id);
         $pinoko = $this->updateCharStatus('pinoko', $pinoko, $player->skills, $player_use_skill_id);
 
-        $player_death = $this->deathCheck($player->skill[$player_use_skill_id]);
-        $pinoko_death = $this->deathCheck($pinoko->skill[$pinoko_use_skill_id]);
-
 
         // attackがない場合は初回である
         $is_first = !isset($_REQUEST["attack"]) ? true: false;
         // 戦闘表示テキストの取得
         $strike_text = $this->getStrikeTexts($player, $pinoko, $player_use_skill_id, $pinoko_use_skill_id, $is_first);
 
-        $player_status = array(
-            "name" => $player->name,
-            "hp" => $player->hp,
-            "mp"=>$player->mp,
-            "death"=>false,
-        );
-        $pinoko_status = array(
-            "name" => $pinoko->name,
-            "hp" => $pinoko->hp,
-            "mp"=>$pinoko->mp,
-            "death"=>false,
-        );
-
         //取得した戦闘コメント、更新された各オブジェクトのHPプロパティを配列化して返す。呼び出しはgate_way.phpより行う。
         return array(
             "strike_text" => $strike_text['player'],
             "enemy_strike_text" => $strike_text['enemy'],
-            "pinoko" => $pinoko_status,
-            "player" => $player_status,
+            "pinoko" => $pinoko->getStatus(), // キャラクターのステータスを取得
+            "player" => $player->getStatus(), // キャラクターのステータスを取得
             //"player_hp" => "HP:".$player->hp,
             "array_detail" => null // TODO: 使われて無さそう
         );
@@ -86,8 +70,25 @@ class Command
             //すでにHPがある場合は戦闘の減産処理を行う
             $char->hp = $_COOKIE[$char_name. '_hp'];
             $damage = $skills[$use_skill_id]["damage"];
+            // HPのダメージ計算
             $hp = $char->hp - $damage;
+
+            // キャラクタが即死したかどうかをセットする
+            $char->setDeath($this->checkDeath($skills[$use_skill_id]["death"]));
+
+            // HP 0以下ならキャラクターの死亡状態にtrue（死亡）をセット
+            if (0 >= $hp && false) { //TODO: たぶんcookieにHPマイナスで入ってるからfalseにしておく
+                $char->setDeath(true);
+            }
+
+            // 死んでいたらHPを0にセット
+            if ($char->death) {
+                $hp = 0;
+            }
+
+            // キャラクターオブジェクトのHPを更新
             $char->setHp($hp);
+            // キャラクターのHPをcookieにセット
             $save->cookie($char_name. '_hp', $hp);
         }
         // 更新済みObjectを返す
@@ -122,8 +123,24 @@ class Command
         );
     }
 
-    public function deathCheck($charskill)
+    /**
+     * 即死か否かを管理
+     * TODO:  確率とかはここで書いていく もしスキルごとに確率が違うのであれば
+     *        Skillsに確率最大値を書いておいて、引数に持ってくる
+     *
+     * @param Bool $skillDeath 利用されたスキルが即死か否か true = 即死スキル
+     * @return Bool true = 死亡 false = 死んでいない
+     */
+    private function checkDeath(Bool $skillDeath, $rate = 2): bool
     {
-        return $charskill["death"];
+        // trueが来ても即死させない、10分の1で死ぬ確率
+        $probability = rand(1, 2);
+        // 即死技かつランダム値が10のときはtrueを返す
+        if ($skillDeath && $rate === $probability) {
+            return true;
+        }
+
+        return false;
     }
+
 }
