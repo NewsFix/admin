@@ -122,6 +122,8 @@
               player_hp.innerHTML = data.player.hp;
               player_mp.innerHTML = data.player.mp;
 
+              // TODO: デバッグ用
+              console.log(data.player.death? "死んだ": "死ななかった");
               //敵側のテキストを攻撃者と同じ"id=result"タグ内に挿入するためsetTimeoutにて時間差をつけている。
               //クロージャ入り変数の仕組みは単に上記のinnerHTMLと同じ。
               var enemy_response = function() {

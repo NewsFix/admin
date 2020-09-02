@@ -84,6 +84,7 @@ class Command
             }
             // キャラクターオブジェクトのHPを更新
             $char->setHp($hp);
+            // キャラクターのHPをcookieにセット
             $save->cookie($char_name. '_hp', $hp);
         }
         // 更新済みObjectを返す
