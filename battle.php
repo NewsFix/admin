@@ -19,7 +19,7 @@
         <div class="comment">
           <!-- "id=result"の箇所にJSにてinnnerHTMLで
           コメント取得 -->
-          <font face="美咲ゴシック">
+          <!--<font face="美咲ゴシック">-->
           <h1 id="result"></h1>
         </div>
 
@@ -47,7 +47,7 @@
               <li id="player_name">ひろし</li>
               <li id="player_hp"></li>
               <li id="player_mp"></li>
-              <li>職業:平民</li>
+              <li>職業:PHPer</li>
             </ul>
             </div>
             <div class="session_info">
@@ -119,8 +119,15 @@
               result.innerHTML = data.strike_text;
               pinoko_value.innerHTML = current_enemy_hp;
               player_value.innerHTML = current_player_hp;
-              player_hp.innerHTML = data.player.hp;
+              //敵のスキルに合わせてHP増減をさせるためタイムラグを生じさせている
+              var player_hp_text = function(){
+                player_hp.innerHTML = data.player.hp;
+              }
+              setTimeout(player_hp_text,2000);
               player_mp.innerHTML = data.player.mp;
+
+              // TODO: デバッグ用
+              console.log(data.player.death? "死んだ": "死ななかった");
 
               //敵側のテキストを攻撃者と同じ"id=result"タグ内に挿入するためsetTimeoutにて時間差をつけている。
               //クロージャ入り変数の仕組みは単に上記のinnerHTMLと同じ。
@@ -128,7 +135,7 @@
               result.innerHTML = data.enemy_strike_text;
               }
 
-              setTimeout(enemy_response,1000);
+              setTimeout(enemy_response,2000);
             }
           }
 

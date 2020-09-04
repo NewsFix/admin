@@ -1,5 +1,7 @@
 <?php
 
+error_log(print_r($_COOKIE, true));
+
 /**
  * AJAXを利用し、全てのPHPファイルをbattle.php内のformを
  * トリガーにこちらから送信する仕組みになっている。
@@ -15,7 +17,7 @@ $skills = $skillClass->get();
 
 
 $player = new Char(
-    "たけし",
+    "ひろし",
     500,
     500,
     $skills
