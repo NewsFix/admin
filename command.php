@@ -26,41 +26,24 @@ class Command
     {
 
         //使用するスキルは乱数発生
-        $player_use_skill_id = rand(2, count($player->skills)-1);
-        $pinoko_use_skill_id = rand(0, count($pinoko->skills)-2);
+        $player_use_skill_id = rand(3, count($player->skills)-1);
+        $pinoko_use_skill_id = rand(0, count($pinoko->skills)-5);
 
         // Objectの更新とcokkieセット
         $player = $this->updateCharStatus('player', $player, $pinoko->skills, $pinoko_use_skill_id);
         $pinoko = $this->updateCharStatus('pinoko', $pinoko, $player->skills, $player_use_skill_id);
-
-        $player_death = $this->deathCheck($player->skill[$player_use_skill_id]);
-        $pinoko_death = $this->deathCheck($pinoko->skill[$pinoko_use_skill_id]);
-
 
         // attackがない場合は初回である
         $is_first = !isset($_REQUEST["attack"]) ? true: false;
         // 戦闘表示テキストの取得
         $strike_text = $this->getStrikeTexts($player, $pinoko, $player_use_skill_id, $pinoko_use_skill_id, $is_first);
 
-        $player_status = array(
-            "name" => $player->name,
-            "hp" => $player->hp,
-            "mp"=>$player->mp,
-            "death"=>false,
-        );
-        $pinoko_status = array(
-            "name" => $pinoko->name,
-            "hp" => $pinoko->hp,
-            "mp"=>$pinoko->mp,
-            "death"=>false,
-        );
-
         //取得した戦闘コメント、更新された各オブジェクトのHPプロパティを配列化して返す。呼び出しはgate_way.phpより行う。
         return array(
             "strike_text" => $strike_text['player'],
             "enemy_strike_text" => $strike_text['enemy'],
-            "pinoko" => $pinoko_status,
-            "player" => $player_status,
+            "pinoko" => $pinoko->getStatus(), // キャラクターのステータスを取得
+            "player" => $player->getStatus(), // キャラクターのステータスを取得,
             //"player_hp" => "HP:".$player->hp,
             "array_detail" => null // TODO: 使われて無さそう
         );
@@ -74,7 +57,7 @@ class Command
      * @param Int    $use_skill_id 使用されるスキルID
      * @return Object 更新したキャラクター
      */
-    private function updateCharStatus(String $char_name, $char, array $skills, Int $use_skill_id)
+    private function updateCharStatus(String $char_name, object $char, array $skills, Int $use_skill_id)
     {
         // SaveDataクラスは毎回インスタンス化されるけど一旦これで
         $save = new Battle\SaveData();
@@ -87,7 +70,23 @@ class Command
             $char->hp = $_COOKIE[$char_name. '_hp'];
             $damage = $skills[$use_skill_id]["damage"];
             $hp = $char->hp - $damage;
+
+            // キャラクタが即死したかどうかをセットする
+            $char->setDeath($skills[$use_skill_id]["death"]);
+
+            // HP 0以下ならキャラクターの死亡状態にtrue（死亡）をセット
+            if (0 >= $hp && false) { //TODO: たぶんcookieにHPマイナスで入ってるからfalseにしておく
+                $char->setDeath(true);
+            }
+
+            // 死んでいたらHPを0にセット
+            if ($char->getStatus()["death"]) {
+                $hp = 0;
+            }
+
+            // キャラクターオブジェクトのHPを更新
             $char->setHp($hp);
+            // キャラクターのHPをcookieにセット
             $save->cookie($char_name. '_hp', $hp);
         }
         // 更新済みObjectを返す
@@ -112,8 +111,8 @@ class Command
         if ($is_first) {
             $player_text = "$enemy->name がおそいかかってきた!!!";
         } else {
-            $player_text = $textGenerator->attackText($player->name, $player->skills[$player_use_skill_id]['text'], $enemy->name, $player->skills[$player_use_skill_id]['damage']);
-            $enemy_text = $textGenerator->attackText($enemy->name, $enemy->skills[$enemy_use_skill_id]['text'], $player->name, $enemy->skills[$enemy_use_skill_id]['damage']);
+            $player_text = $textGenerator->attackText($player->name, $player->skills[$player_use_skill_id]['name'], $player->skills[$player_use_skill_id]['text'], $enemy->name, $player->skills[$player_use_skill_id]['damage']);
+            $enemy_text = $textGenerator->attackText($enemy->name, $enemy->skills[$enemy_use_skill_id]['name'], $enemy->skills[$enemy_use_skill_id]['text'], $player->name, $enemy->skills[$enemy_use_skill_id]['damage']);
         }
 
         return array(
@@ -122,8 +121,18 @@ class Command
         );
     }
 
-    public function deathCheck($charskill)
+    //配列へスキルごとに即死率を入れているので不必要
+    /*
+    private function checkDeath(Bool $skillDeath, $rate = 2): bool
     {
-        return $charskill["death"];
+        // trueが来ても即死させない、10分の1で死ぬ確率
+        $probability = rand(1, 2);
+        // 即死技かつランダム値が10のときはtrueを返す
+        if ($skillDeath && $rate === $probability) {
+            return true;
+        }
+
+        return false;
     }
+    */
 }

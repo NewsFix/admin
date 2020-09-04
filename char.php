@@ -11,6 +11,7 @@ class Char
     public int $hp;
     public int $mp;
     public array $skills;
+    private bool $death;
 
     public function __construct(string $name, int $hp, int $mp, array $skills = [])
     {
@@ -18,6 +19,23 @@ class Char
         $this->hp = $hp;
         $this->mp = $mp;
         $this->skills = $skills;
+        $this->death = false; // 死の状態デフォルトfalseだから引数には入れていない
+    }
+
+    /**
+     * キャラクタステータスを配列に入れて返す
+     * TODO: command phpに書くのがいい気がするけどいったんここで
+     *
+     * @return Array ステータスの塊
+     */
+    public function getStatus(): array
+    {
+        return array(
+            "name" => $this->name,
+            "hp" => $this->hp,
+            "mp"=> $this->mp,
+            "death" => $this->death, // 死んでいたらtrue
+        );
     }
 
     /**
@@ -30,5 +48,16 @@ class Char
     public function setHp(int $hp):void
     {
         $this->hp = $hp;
+    }
+
+    /**
+     * 死亡状況をセットする
+     *
+     * @param bool $death 死んでたらtrue
+     * @return void true/falseをプロパティへ格納
+     */
+    public function setDeath(bool $death):void
+    {
+        $this->death = $death;
     }
 }

@@ -49,8 +49,8 @@ class Skills
             "addHP"=> 0,
             "damage"=> $this->randomDamage(50, 100),
             "useMP" => 0,
-            "text" => "お注射をねじ込んだ!!",
-            "death" => false,
+            "text" => "にお注射をねじ込んだ!!",
+            "death" => $this->isDead(0),
           ],
 
           [
@@ -58,8 +58,44 @@ class Skills
             "addHP"=> 0,
             "damage"=> 10,
             "useMP" => 0,
-            "text" => "解剖した",
-            "death" => true,
+            "text" => "を解剖した",
+            "death" => $this->isDead(20),
+          ],
+
+          [
+            "name" => "アッチョンプリケ",
+            "addHP"=> 0,
+            "damage"=> $this->randomDamage(200, 300),
+            "useMP" => 0,
+            "text" => "はのたうち回っている。",
+            "death" => $this->isDead(0),
+          ],
+
+          [
+            "name" => "念力",
+            "addHP"=> 0,
+            "damage"=> $this->randomDamage(999, 999),
+            "useMP" => 0,
+            "text" => "はオペに失敗した....",
+            "death" => $this->isDead(0),
+          ],
+
+          [
+            "name" => "echo",
+            "addHP"=> 0,
+            "damage"=> $this->randomDamage(30, 60),
+            "useMP" => 0,
+            "text" => "へ出力した。",
+            "death" => $this->isDead(0),
+          ],
+
+          [
+            "name" => "変数定義",
+            "addHP"=> 0,
+            "damage"=> $this->randomDamage(0, 0),
+            "useMP" => 0,
+            "text" => "に対し変数を定義できない!!",
+            "death" => $this->isDead(0),
           ],
 
           [
@@ -68,7 +104,7 @@ class Skills
             "damage"=> $this->randomDamage(30, 60),
             "useMP" => 0,
             "text" => "を強烈にカツアゲした!!",
-            "death" => false,
+            "death" => $this->isDead(0),
           ],
 
           [
@@ -76,8 +112,8 @@ class Skills
             "addHP"=> 0,
             "damage"=> $this->randomDamage(50, 100),
             "useMP" => 0,
-            "text" => "闇夜を切り裂いた!!",
-            "death" => true,
+            "text" => "とは無関係に闇夜を切り裂いた!!",
+            "death" => $this->isDead(0),
           ],
         ];
     }
@@ -92,5 +128,17 @@ class Skills
     private function randomDamage(int $min, int $max):int
     {
         return rand($min, $max);
+    }
+
+    /**
+     * 即死率の定義
+     *
+     * @param int $dead_rate 即死率
+     * @return bool
+     */
+    private function isDead($dead_rate):bool
+    {
+        $rate = rand(0, 100);
+        return $dead_rate >= $rate;
     }
 }
