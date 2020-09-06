@@ -51,6 +51,7 @@ class Skills
             "useMP" => 0,
             "text" => "にお注射をねじ込んだ!!",
             "death" => $this->isDead(0),
+            "poison" => $this->isPoison(100)
           ],
 
           [
@@ -60,6 +61,7 @@ class Skills
             "useMP" => 0,
             "text" => "を解剖した",
             "death" => $this->isDead(20),
+            "poison" => $this->isPoison(100)
           ],
 
           [
@@ -69,6 +71,7 @@ class Skills
             "useMP" => 0,
             "text" => "はのたうち回っている。",
             "death" => $this->isDead(0),
+            "poison" => $this->isPoison(100)
           ],
 
           [
@@ -78,6 +81,7 @@ class Skills
             "useMP" => 0,
             "text" => "はオペに失敗した....",
             "death" => $this->isDead(0),
+            "poison" => $this->isPoison(100)
           ],
 
           [
@@ -87,6 +91,7 @@ class Skills
             "useMP" => 0,
             "text" => "へ出力した。",
             "death" => $this->isDead(0),
+            "poison" => $this->isPoison(0)
           ],
 
           [
@@ -96,6 +101,7 @@ class Skills
             "useMP" => 0,
             "text" => "に対し変数を定義できない!!",
             "death" => $this->isDead(0),
+            "poison" => $this->isPoison(0)
           ],
 
           [
@@ -105,6 +111,7 @@ class Skills
             "useMP" => 0,
             "text" => "を強烈にカツアゲした!!",
             "death" => $this->isDead(0),
+            "poison" => $this->isPoison(0)
           ],
 
           [
@@ -114,6 +121,7 @@ class Skills
             "useMP" => 0,
             "text" => "とは無関係に闇夜を切り裂いた!!",
             "death" => $this->isDead(0),
+            "poison" => $this->isPoison(0)
           ],
         ];
     }
@@ -136,9 +144,21 @@ class Skills
      * @param int $dead_rate 即死率
      * @return bool
      */
-    private function isDead($dead_rate):bool
+    private function isDead(int $dead_rate):bool
     {
         $rate = rand(0, 100);
         return $dead_rate >= $rate;
+    }
+
+    /**
+     * 毒化率の定義
+     *
+     * @param int $poison_rate 即死率
+     * @return bool
+     */
+    private function isPoison(int $poison_rate):bool
+    {
+        $rate = rand(0, 100);
+        return $poison_rate >= $rate;
     }
 }

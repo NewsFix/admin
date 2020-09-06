@@ -11,7 +11,9 @@ class Char
     public int $hp;
     public int $mp;
     public array $skills;
-    private bool $death;
+    public bool $death;
+    public bool $poison;
+    public bool $paralysis;
 
     public function __construct(string $name, int $hp, int $mp, array $skills = [])
     {
@@ -35,6 +37,7 @@ class Char
             "hp" => $this->hp,
             "mp"=> $this->mp,
             "death" => $this->death, // 死んでいたらtrue
+            "poison" => $this->poison
         );
     }
 
@@ -51,6 +54,18 @@ class Char
     }
 
     /**
+     * SESSIONもしくはCOOKIEへのMP設定用のセッター。
+     * 初期設定のMPはconstructで実行する。
+     *
+     * @param int $mp
+     * @return void HPをプロパティへ格納
+     */
+    public function setMp(int $mp):void
+    {
+        $this->mp = $mp;
+    }
+
+    /**
      * 死亡状況をセットする
      *
      * @param bool $death 死んでたらtrue
@@ -59,5 +74,27 @@ class Char
     public function setDeath(bool $death):void
     {
         $this->death = $death;
+    }
+
+    /**
+     * 毒化状況をセットする
+     *
+     * @param bool $poison 毒化していたらtrue
+     * @return void true/falseをプロパティへ格納
+     */
+    public function setPoison(bool $poison):void
+    {
+        $this->poison = $poison;
+    }
+
+    /**
+     * 麻痺状況をセットする
+     *
+     * @param bool $death 麻痺していたらtrue
+     * @return void true/falseをプロパティへ格納
+     */
+    public function setParalysis(bool $paralysis):void
+    {
+        $this->paralysis = $paralysis;
     }
 }
