@@ -50,6 +50,20 @@ class Command
     }
 
     /**
+     * 毒化した場合のダメージ幅設定
+     * ※後に切り分けるため移動すること
+     *
+     * @param int $min 最低値
+     * @param int $min 最高値
+     * @return
+     */
+    private function poisonLogic($min, $max):int
+    {
+        return rand($min, $max);
+    }
+
+
+    /**
      * キャラクター情報の更新を行う
      * @param String $char_name    キャラクター名(player, pinokoなどのほう外部入力されたものではない)
      * @param Object $char         キャラクターClass Object
@@ -80,10 +94,43 @@ class Command
             }
 
             // 死んでいたらHPを0にセット
-            if ($char->getStatus()["death"]) {
+            if ($char->skills[$use_skill_id]["death"]) {
                 $hp = 0;
             }
 
+            /**
+             *
+             * 0.前提条件として毒状態かどうか確認し、毒状態でなければ1を実行
+             * 1.毒攻撃による確率計算を行い、true or falseの審査
+             * 2.trueの場合はCOOKIEにpoison=trueをセットする
+             * 3.COOKIEにすでに値が入っている場合は毒解除計算を行い、毒解除に成功していればpoison=falseをセット
+             * 4.毒解除がfalseの場合は毒ダメージ計算処理を行う
+             */
+
+            if (!isset($_COOKIE[$char_name."_poison"])) {
+                if ($char->skills[$use_skill_id]["poison"]===true) {
+                    $_COOKIE[$char_name."_poison"]= true;
+                }
+            } else {
+                $rand = rand(0, 100);
+                if (50 >= $rand) {
+                    $_COOKIE[$char_name."_poison"] = false;
+                }
+            }
+
+
+
+            /*
+            if(isset($_COOKIE[$char_name."_poison"])){
+            $rand = rand(0, 100);
+            if (50 >= $rand) {
+                $char->poison = false;
+            }
+            // 毒化していたら任意の乱数でダメージ減算
+            if ($char->poison) {
+                $hp -= $this->poisonLogic(10000, 20000);
+            }
+            */
             // キャラクターオブジェクトのHPを更新
             $char->setHp($hp);
             // キャラクターのHPをcookieにセット
