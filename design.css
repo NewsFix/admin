@@ -17,7 +17,7 @@ body {
   box-shadow: 0.1em 0.1em 0.2em;
 }
 
-#result {
+#system-message {
   color: #fff;
   font-size: 2em;
 }

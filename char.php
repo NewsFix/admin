@@ -22,6 +22,7 @@ class Char
         $this->mp = $mp;
         $this->skills = $skills;
         $this->death = false; // 死の状態デフォルトfalseだから引数には入れていない
+        $this->poison = false;
     }
 
     /**
