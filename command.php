@@ -121,7 +121,7 @@ class Command
 
                 if ($isPoison) { // キャラクターが毒であるとき
                     // 毒のリフレッシュ処理を行う
-                    if ($this->refreshPoison($char->name)) {
+                    if ($this->refreshPoison()) {
                         // 毒のリフレッシュ(治った)とき, キャラを毒falseにする
                         $char = $this->setPoison($save, $char, false);
                     } // 毒解除失敗時はなにもしない
@@ -168,10 +168,9 @@ class Command
     /**
      * 毒解除処理を行う
      *
-     * @param String $char_name キャラ名
      * @return boolean 毒解除成功 true
      */
-    private function refreshPoison(String $char_name): Bool
+    private function refreshPoison(): Bool
     {
         // 1/2で毒解除処理
         if (50 > rand(0, 100)) {
