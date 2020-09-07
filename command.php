@@ -108,30 +108,28 @@ class Command
 
             //$_COOKIE[$char_name."_poison"]がCOOKIE配列に入っていない場合
             if (!isset($_COOKIE[$char_name."_poison"])) {
-
-                //毒化計算を終えたtrueもしくはfalseをプロパティにセットする
-                $char->setPoison($skills[$use_skill_id]["poison"]);
-
-                //上記のプロパティ結果をCOOKIEにセットする
-                //注意: setcookieのセットタイミングは2周目以降に適応
-                $save->cookie($char_name."_poison", $char->poison?"1":"0");
+                $char = $this->setPoison($save, $char, $skills[$use_skill_id]["poison"]);
 
                 //毒の時の処理
                 //上記の理由からCOOKIEは、まだ更新されていないためCOOKIEを参考にしない
-                if ($char->poison == "1") {
+                if ($char->poison) {
                     $hp -= $this->poisonLogic(10000, 20000);
                 }
             } else {
                 //毒継続かの判断のためCOOKIEに入っている既存値を参照し、かつ毒であった場合
                 if ($_COOKIE[$char_name."_poison"] == "1") {
-                    // 1/2で毒解除処理
-                    $rand = rand(0, 100);
-                    if (50 > $rand) {
-                        $char->setPoison(false);
-                        $save->cookie($char_name."_poison", $char->poison?"1":"0");
-                    } else {
+
+                    // 毒のリフレッシュ処理
+                    if ($this->refreshPoison()) {
+                        $char = $this->setPoison($char_name, false);
+                    }
+
+                    // キャラクターが毒であればHP減算
+                    if ($char->poison) {
                         $hp -= $this->poisonLogic(10000, 20000);
                     }
+                } else { // 毒ではないとき
+                    $char = $this->setPoison($save, $char, $skills[$use_skill_id]["poison"]);
                 }
             }
 
@@ -142,6 +140,32 @@ class Command
         }
         // 更新済みObjectを返す
         return $char;
+    }
+
+    function setPoison($save, $char, $isPoison)
+    {
+        //毒化計算を終えたtrueもしくはfalseをプロパティにセットする
+        $char->setPoison($isPoison);
+        //上記のプロパティ結果をCOOKIEにセットする
+        //注意: setcookieのセットタイミングは2周目以降に適応
+        $save->cookie($char->name. "_poison", $isPoison? "1": "0");
+
+        return $char;
+
+    }
+
+    function refreshPoison($char_name)
+    {
+        //毒継続かの判断のためCOOKIEに入っている既存値を参照し、かつ毒であった場合
+        if ($_COOKIE[$char_name. "_poison"] == "1") {
+            // 1/2で毒解除処理
+            if (50 > rand(0, 100)) {
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     /**
