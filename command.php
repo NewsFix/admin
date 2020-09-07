@@ -108,15 +108,27 @@ class Command
              */
 
             if (!isset($_COOKIE[$char_name."_poison"])) {
-                if ($char->skills[$use_skill_id]["poison"]===true) {
-                    $_COOKIE[$char_name."_poison"]= true;
+                $char->setPoison($skills[$use_skill_id]["poison"]);
+                $save->cookie($char_name."_poison", $char->poison);
+                if ($_COOKIE[$char_name."_poison"]===true) {
+                    $hp -= $this->poisonLogic(10000, 20000);
                 }
             } else {
-                $rand = rand(0, 100);
-                if (50 >= $rand) {
-                    $_COOKIE[$char_name."_poison"] = false;
+                if ($_COOKIE[$char_name."_poison"]===true) {
+                    $rand = rand(0, 100);
+                    if (50 >= $rand) {
+                        $char->poison = false;
+                        $save->cookie($char_name."_poison", $char->poison);
+                    }
+                    if ($_COOKIE[$char_name."_poison"]===true) {
+                        $hp -= $this->poisonLogic(10000, 20000);
+                    }
                 }
             }
+
+
+
+
 
 
 

@@ -1,7 +1,5 @@
 <?php
 
-error_log(print_r($_COOKIE, true));
-
 /**
  * AJAXを利用し、全てのPHPファイルをbattle.php内のformを
  * トリガーにこちらから送信する仕組みになっている。
@@ -33,5 +31,7 @@ $pinoko = new Char(
 require_once("command.php");
 
 $command = new Command();
+
+error_log(print_r($_COOKIE["poison"], true));
 
 echo json_encode($command->get($player, $pinoko));
