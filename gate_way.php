@@ -32,6 +32,6 @@ require_once("command.php");
 
 $command = new Command();
 
-error_log(print_r($_COOKIE["poison"], true));
+error_log(print_r($_COOKIE, true));
 
 echo json_encode($command->get($player, $pinoko));

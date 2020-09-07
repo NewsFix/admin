@@ -62,7 +62,6 @@ class Command
         return rand($min, $max);
     }
 
-
     /**
      * キャラクター情報の更新を行う
      * @param String $char_name    キャラクター名(player, pinokoなどのほう外部入力されたものではない)
@@ -107,42 +106,35 @@ class Command
              * 4.毒解除がfalseの場合は毒ダメージ計算処理を行う
              */
 
+            //$_COOKIE[$char_name."_poison"]がCOOKIE配列に入っていない場合
             if (!isset($_COOKIE[$char_name."_poison"])) {
+
+                //毒化計算を終えたtrueもしくはfalseをプロパティにセットする
                 $char->setPoison($skills[$use_skill_id]["poison"]);
-                $save->cookie($char_name."_poison", $char->poison);
-                if ($_COOKIE[$char_name."_poison"]===true) {
+
+                //上記のプロパティ結果をCOOKIEにセットする
+                //注意: setcookieのセットタイミングは2周目以降に適応
+                $save->cookie($char_name."_poison", $char->poison?"1":"0");
+
+                //毒の時の処理
+                //上記の理由からCOOKIEは、まだ更新されていないためCOOKIEを参考にしない
+                if ($char->poison == "1") {
                     $hp -= $this->poisonLogic(10000, 20000);
                 }
             } else {
-                if ($_COOKIE[$char_name."_poison"]===true) {
+                //毒継続かの判断のためCOOKIEに入っている既存値を参照し、かつ毒であった場合
+                if ($_COOKIE[$char_name."_poison"] == "1") {
+                    // 1/2で毒解除処理
                     $rand = rand(0, 100);
-                    if (50 >= $rand) {
-                        $char->poison = false;
-                        $save->cookie($char_name."_poison", $char->poison);
-                    }
-                    if ($_COOKIE[$char_name."_poison"]===true) {
+                    if (50 > $rand) {
+                        $char->setPoison(false);
+                        $save->cookie($char_name."_poison", $char->poison?"1":"0");
+                    } else {
                         $hp -= $this->poisonLogic(10000, 20000);
                     }
                 }
             }
 
-
-
-
-
-
-
-            /*
-            if(isset($_COOKIE[$char_name."_poison"])){
-            $rand = rand(0, 100);
-            if (50 >= $rand) {
-                $char->poison = false;
-            }
-            // 毒化していたら任意の乱数でダメージ減算
-            if ($char->poison) {
-                $hp -= $this->poisonLogic(10000, 20000);
-            }
-            */
             // キャラクターオブジェクトのHPを更新
             $char->setHp($hp);
             // キャラクターのHPをcookieにセット

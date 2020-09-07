@@ -147,7 +147,7 @@ class Skills
     private function isDead(int $dead_rate):bool
     {
         $rate = rand(0, 100);
-        return $rand < $dead_rate;
+        return $rate < $dead_rate ? true : false;
     }
 
     /**
@@ -159,6 +159,6 @@ class Skills
     private function isPoison(int $poison_rate):bool
     {
         $rate = rand(0, 100);
-        return $rate < $poison_rate;
+        return $rate < $poison_rate ? true : false;
     }
 }
