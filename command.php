@@ -81,8 +81,7 @@ class Command
         } else {
             //すでにHPがある場合は戦闘の減産処理を行う
             $char->hp = $_COOKIE[$char_name. '_hp'];
-            $damage = $skills[$use_skill_id]["damage"];
-            $hp = $char->hp - $damage;
+            $hp = $char->hp - $skills[$use_skill_id]["damage"];;
 
             // キャラクタが即死したかどうかをセットする
             $char->setDeath($skills[$use_skill_id]["death"]);
@@ -109,12 +108,6 @@ class Command
             //$_COOKIE[$char_name."_poison"]がCOOKIE配列に入っていない場合
             if (!isset($_COOKIE[$char->name."_poison"])) {
                 $char = $this->setPoison($save, $char, $skills[$use_skill_id]["poison"]);
-
-                //毒の時の処理
-                //上記の理由からCOOKIEは、まだ更新されていないためCOOKIEを参考にしない
-                if ($char->poison) {
-                    $hp -= $this->poisonLogic(10000, 20000);
-                }
             } else {
                 //毒継続かの判断のためCOOKIEに入っている既存値を参照し、かつ毒であった場合
                 $isPoison = $_COOKIE[$char->name."_poison"] == "1"? true: false; //別に三項演算である必要はない
@@ -126,13 +119,14 @@ class Command
                         $char = $this->setPoison($save, $char, false);
                     } // 毒解除失敗時はなにもしない
 
-                    // キャラクターが毒であればHP減算
-                    if ($char->poison) {
-                        $hp -= $this->poisonLogic(10000, 20000);
-                    }
                 } else { // キャラクターが毒ではないとき
                     $char = $this->setPoison($save, $char, $skills[$use_skill_id]["poison"]);
                 }
+            }
+
+            // キャラクターが毒であればHP減算
+            if ($char->poison) {
+                $hp = calcPoisonDamage($char->poison, $hp);
             }
 
             // キャラクターオブジェクトのHPを更新
@@ -142,6 +136,23 @@ class Command
         }
         // 更新済みObjectを返す
         return $char;
+    }
+
+    /**
+     * 毒状態のHP減算処理
+     *
+     * @param Boolean $isPoison 毒であるか
+     * @param Int $hp HP
+     * @return Int HP
+     */
+    private function calcPoisonDamage($isPoison, $hp)
+    {
+        // 毒の場合のみHP減算
+        if ($char->poison) {
+            $hp -= $this->poisonLogic(10000, 20000);
+        }
+
+        return $hp;
     }
 
     /**
