@@ -154,7 +154,7 @@ class Command
      */
     private function setPoison(Object $save, Object $char, Bool $isPoison): Object
     {
-        error_log($isPoison ? "スキルは毒攻撃ではなかったもしくは毒にならなかった": "毒になった");
+        error_log($isPoison ?"毒になった": "スキルは毒攻撃ではなかったもしくは毒にならなかった");
         //毒化計算を終えたtrueもしくはfalseをプロパティにセットする
         $char->setPoison($isPoison);
         //上記のプロパティ結果をCOOKIEにセットする
