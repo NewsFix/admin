@@ -117,9 +117,12 @@ class Command
                 }
             } else {
                 //毒継続かの判断のためCOOKIEに入っている既存値を参照し、かつ毒であった場合
-                $isPoison = $_COOKIE[$char->name."_poison"] == "1"? true: false; //別に三項演算である必要はない
+                $isPoison = $_COOKIE[$char->name."_poison"] == "1";
+                //別に三項演算である必要はない
 
-                if ($isPoison) { // キャラクターが毒であるとき
+                //$isPoisonに直接intの1を入力した場合はなぜか動かない。php -a 試した結果trueになっていた
+                if ($isPoison) {
+                    // キャラクターが毒であるとき
                     // 毒のリフレッシュ処理を行う
                     if ($this->refreshPoison()) {
                         // 毒のリフレッシュ(治った)とき, キャラを毒falseにする
@@ -132,6 +135,10 @@ class Command
                     }
                 } else { // キャラクターが毒ではないとき
                     $char = $this->setPoison($save, $char, $skills[$use_skill_id]["poison"]);
+
+                    if ($char->poison) {
+                        $hp -= $this->poisonLogic(10000, 20000);
+                    }
                 }
             }
 
@@ -155,14 +162,15 @@ class Command
     private function setPoison(Object $save, Object $char, Bool $isPoison): Object
     {
         error_log($isPoison ?"毒になった": "スキルは毒攻撃ではなかったもしくは毒にならなかった");
+
         //毒化計算を終えたtrueもしくはfalseをプロパティにセットする
         $char->setPoison($isPoison);
+
         //上記のプロパティ結果をCOOKIEにセットする
         //注意: setcookieのセットタイミングは2周目以降に適応
-        $save->cookie($char->name. "_poison", $isPoison? "1": "0");
+        $save->cookie($char->name. "_poison", $isPoison ? "1": "0");
 
         return $char;
-
     }
 
     /**

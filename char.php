@@ -14,6 +14,7 @@ class Char
     public bool $death;
     public bool $poison;
     public bool $paralysis;
+    public bool $encode_bug;
 
     public function __construct(string $name, int $hp, int $mp, array $skills = [])
     {
