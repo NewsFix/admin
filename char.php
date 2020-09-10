@@ -24,6 +24,7 @@ class Char
         $this->skills = $skills;
         $this->death = false; // 死の状態デフォルトfalseだから引数には入れていない
         $this->poison = false; // 毒の状態デフォルトfalseだから引数には入れていない
+        $this->encode_bug = false; // エンコード状態異常デフォルトfalseだから引数には入れていない
     }
 
     /**
@@ -39,7 +40,8 @@ class Char
             "hp" => $this->hp,
             "mp"=> $this->mp,
             "death" => $this->death, // 死んでいたらtrue
-            "poison" => $this->poison
+            "poison" => $this->poison,
+            "encode_bug" => $this->encode_bug
         );
     }
 
@@ -98,5 +100,16 @@ class Char
     public function setParalysis(bool $paralysis):void
     {
         $this->paralysis = $paralysis;
+    }
+
+    /**
+     * エンコード状況をセットする
+     *
+     * @param bool $encode_bug エンコード状態異常でtrue
+     * @return void true/falseをプロパティへ格納
+     */
+    public function setEncode(bool $encode_bug):void
+    {
+        $this->encode_bug = $encode_bug;
     }
 }

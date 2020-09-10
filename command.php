@@ -38,6 +38,13 @@ class Command
         // 戦闘表示テキストの取得
         $strike_text = $this->getStrikeTexts($player, $pinoko, $player_use_skill_id, $pinoko_use_skill_id, $is_first);
 
+        /**
+         * 文字化け状態異常を生成
+         *
+         *
+         */
+
+
         //取得した戦闘コメント、更新された各オブジェクトのHPプロパティを配列化して返す。呼び出しはgate_way.phpより行う。
         return array(
             "strike_text" => $strike_text['player'],
@@ -107,8 +114,8 @@ class Command
              */
 
             //$_COOKIE[$char_name."_poison"]がCOOKIE配列に入っていない場合
-            if (!isset($_COOKIE[$char->name."_poison"])) {
-                $char = $this->setPoison($save, $char, $skills[$use_skill_id]["poison"]);
+            if (!isset($_COOKIE[$char_name."_poison"])) {
+                $char = $this->setPoison($char_name, $save, $char, $skills[$use_skill_id]["poison"]);
 
                 //毒の時の処理
                 //上記の理由からCOOKIEは、まだ更新されていないためCOOKIEを参考にしない
@@ -126,7 +133,7 @@ class Command
                     // 毒のリフレッシュ処理を行う
                     if ($this->refreshPoison()) {
                         // 毒のリフレッシュ(治った)とき, キャラを毒falseにする
-                        $char = $this->setPoison($save, $char, false);
+                        $char = $this->setPoison($char_name, $save, $char, false);
                     } // 毒解除失敗時はなにもしない
 
                     // キャラクターが毒であればHP減算
@@ -159,7 +166,7 @@ class Command
      * @param 毒か否か
      * @return Object Char class
      */
-    private function setPoison(Object $save, Object $char, Bool $isPoison): Object
+    private function setPoison(String $char_name, Object $save, Object $char, Bool $isPoison): Object
     {
         error_log($isPoison ?"毒になった": "スキルは毒攻撃ではなかったもしくは毒にならなかった");
 
@@ -218,18 +225,20 @@ class Command
         );
     }
 
-    //配列へスキルごとに即死率を入れているので不必要
-    /*
-    private function checkDeath(Bool $skillDeath, $rate = 2): bool
+    /**
+     * エンコード解除処理を行う
+     *
+     * @return boolean エンコード解除成功 true
+     */
+    private function refreshEncode(): Bool
     {
-        // trueが来ても即死させない、10分の1で死ぬ確率
-        $probability = rand(1, 2);
-        // 即死技かつランダム値が10のときはtrueを返す
-        if ($skillDeath && $rate === $probability) {
+        // 1/2でエンコード解除処理
+        if (50 > rand(0, 100)) {
+            error_log("エンコードが正常化に成功した");
             return true;
         }
-
+        // エンコード解除できないとき
+        error_log("エンコードが正常化に失敗した");
         return false;
     }
-    */
 }
