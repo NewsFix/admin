@@ -18,7 +18,7 @@
    btn-lg btn-block"
    id="option-command">
    <!--現在テスト中のためアクセス先変更中-->
-   <a href="battle.php">はじめる</a>
+   <a href="scripts/test.html">はじめる</a>
   </button>
   <button type="button" class="btn
    btn-lg btn-block" id="option-command">
