@@ -3,11 +3,15 @@ session_start();
 
 require_once('battle/text.php');
 require_once('battle/saveData.php');
+require_once('battle/poison_status.php');
+
 
 // 戦闘テキストを管理するClass
 use Battle\Text;
 // データセーブを管理するClass
 use Battle\SaveData;
+// 毒異常を管理するClass
+use Battle\Poison;
 
 class Command
 {
@@ -24,6 +28,7 @@ class Command
      */
     public function get($player, $pinoko)
     {
+        error_log(var_export($_COOKIE, true));
 
         //使用するスキルは乱数発生
         $player_use_skill_id = rand(3, count($player->skills)-1);
@@ -57,19 +62,6 @@ class Command
     }
 
     /**
-     * 毒化した場合のダメージ幅設定
-     * ※後に切り分けるため移動すること
-     *
-     * @param int $min 最低値
-     * @param int $min 最高値
-     * @return
-     */
-    private function poisonLogic($min, $max):int
-    {
-        return rand($min, $max);
-    }
-
-    /**
      * キャラクター情報の更新を行う
      * @param String $char_name    キャラクター名(player, pinokoなどのほう外部入力されたものではない)
      * @param Object $char         キャラクターClass Object
@@ -81,12 +73,12 @@ class Command
     {
         // SaveDataクラスは毎回インスタンス化されるけど一旦これで
         $save = new Battle\SaveData();
+
         //COOKIE,SESSIONいずれも挿入する情報は必要最低限にする。HP,MP意外戦闘で不必要な情報は不要。
         if (!isset($_COOKIE[$char_name. '_hp'])) {
             // hpがない場合生成
             $save->cookie($char_name. '_hp', $char->hp);
         } else {
-            //test
             //すでにHPがある場合は戦闘の減産処理を行う
             $char->hp = $_COOKIE[$char_name. '_hp'];
             $damage = $skills[$use_skill_id]["damage"];
@@ -105,50 +97,10 @@ class Command
                 $hp = 0;
             }
 
-            /**
-             *
-             * 0.前提条件として毒状態かどうか確認し、毒状態でなければ1を実行
-             * 1.毒攻撃による確率計算を行い、true or falseの審査
-             * 2.trueの場合はCOOKIEにpoison=trueをセットする
-             * 3.COOKIEにすでに値が入っている場合は毒解除計算を行い、毒解除に成功していればpoison=falseをセット
-             * 4.毒解除がfalseの場合は毒ダメージ計算処理を行う
-             */
+            // poison_statusクラスは毎回インスタンス化されるけど一旦これで
+            $poison_status = new Battle\Poison();
 
-            //$_COOKIE[$char_name."_poison"]がCOOKIE配列に入っていない場合
-            if (!isset($_COOKIE[$char_name."_poison"])) {
-                $char = $this->setPoison($char_name, $save, $char, $skills[$use_skill_id]["poison"]);
-
-                //毒の時の処理
-                //上記の理由からCOOKIEは、まだ更新されていないためCOOKIEを参考にしない
-                if ($char->poison) {
-                    $hp -= $this->poisonLogic(10000, 20000);
-                }
-            } else {
-                //毒継続かの判断のためCOOKIEに入っている既存値を参照し、かつ毒であった場合
-                $isPoison = $_COOKIE[$char->name."_poison"] == "1";
-                //別に三項演算である必要はない
-
-                //$isPoisonに直接intの1を入力した場合はなぜか動かない。php -a 試した結果trueになっていた
-                if ($isPoison) {
-                    // キャラクターが毒であるとき
-                    // 毒のリフレッシュ処理を行う
-                    if ($this->refreshPoison()) {
-                        // 毒のリフレッシュ(治った)とき, キャラを毒falseにする
-                        $char = $this->setPoison($char_name, $save, $char, false);
-                    } // 毒解除失敗時はなにもしない
-
-                    // キャラクターが毒であればHP減算
-                    if ($char->poison) {
-                        $hp -= $this->poisonLogic(10000, 20000);
-                    }
-                } else { // キャラクターが毒ではないとき
-                    $char = $this->setPoison($save, $char, $skills[$use_skill_id]["poison"]);
-
-                    if ($char->poison) {
-                        $hp -= $this->poisonLogic(10000, 20000);
-                    }
-                }
-            }
+            $char = $poison_status->updatePoisonStatus($char_name, $char, $skills, $use_skill_id, $save);
 
             // キャラクターオブジェクトのHPを更新
             $char->setHp($hp);
@@ -157,45 +109,6 @@ class Command
         }
         // 更新済みObjectを返す
         return $char;
-    }
-
-    /**
-     * 毒情報を保存する
-     *
-     * @param Object $save
-     * @param Object $char
-     * @param 毒か否か
-     * @return Object Char class
-     */
-    private function setPoison(String $char_name, Object $save, Object $char, Bool $isPoison): Object
-    {
-        error_log($isPoison ?"毒になった": "スキルは毒攻撃ではなかったもしくは毒にならなかった");
-
-        //毒化計算を終えたtrueもしくはfalseをプロパティにセットする
-        $char->setPoison($isPoison);
-
-        //上記のプロパティ結果をCOOKIEにセットする
-        //注意: setcookieのセットタイミングは2周目以降に適応
-        $save->cookie($char->name. "_poison", $isPoison ? "1": "0");
-
-        return $char;
-    }
-
-    /**
-     * 毒解除処理を行う
-     *
-     * @return boolean 毒解除成功 true
-     */
-    private function refreshPoison(): Bool
-    {
-        // 1/2で毒解除処理
-        if (50 > rand(0, 100)) {
-            error_log("毒が解除された");
-            return true;
-        }
-        // 毒解除できないとき
-        error_log("毒の解除に失敗した");
-        return false;
     }
 
     /**
@@ -224,22 +137,5 @@ class Command
             'player' => $player_text,
             'enemy' => $enemy_text,
         );
-    }
-
-    /**
-     * エンコード解除処理を行う
-     *
-     * @return boolean エンコード解除成功 true
-     */
-    private function refreshEncode(): Bool
-    {
-        // 1/2でエンコード解除処理
-        if (50 > rand(0, 100)) {
-            error_log("エンコードが正常化に成功した");
-            return true;
-        }
-        // エンコード解除できないとき
-        error_log("エンコードが正常化に失敗した");
-        return false;
     }
 }
