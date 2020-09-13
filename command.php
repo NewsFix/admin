@@ -86,6 +86,7 @@ class Command
             // hpがない場合生成
             $save->cookie($char_name. '_hp', $char->hp);
         } else {
+            //test
             //すでにHPがある場合は戦闘の減産処理を行う
             $char->hp = $_COOKIE[$char_name. '_hp'];
             $damage = $skills[$use_skill_id]["damage"];
