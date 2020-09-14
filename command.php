@@ -4,6 +4,8 @@ session_start();
 require_once('battle/text.php');
 require_once('battle/saveData.php');
 require_once('battle/poison_status.php');
+require_once('battle/paralysis_status.php');
+
 
 
 // 戦闘テキストを管理するClass
@@ -12,6 +14,8 @@ use Battle\Text;
 use Battle\SaveData;
 // 毒異常を管理するClass
 use Battle\Poison;
+// 麻痺異常を管理するClass
+use Battle\Paralysis;
 
 class Command
 {
@@ -28,7 +32,8 @@ class Command
      */
     public function get($player, $pinoko)
     {
-        error_log(var_export($_COOKIE, true));
+        //setcookie("paralysis", true, time()-60*60);
+        //error_log(var_export($_COOKIE, true));
 
         //使用するスキルは乱数発生
         $player_use_skill_id = rand(3, count($player->skills)-1);
@@ -74,45 +79,56 @@ class Command
         // SaveDataクラスは毎回インスタンス化されるけど一旦これで
         $save = new Battle\SaveData();
 
+        // Paralysisクラスは毎回インスタンス化されるけど一旦これで
+
+        $paralysis = new Battle\Paralysis();
+        $char = $paralysis->updateParalysisStatus($char_name, $char, $skills, $use_skill_id, $save);
+
         //COOKIE,SESSIONいずれも挿入する情報は必要最低限にする。HP,MP意外戦闘で不必要な情報は不要。
         if (!isset($_COOKIE[$char_name. '_hp'])) {
             // hpがない場合生成
             $save->cookie($char_name. '_hp', $char->hp);
         } else {
-            //すでにHPがある場合は戦闘の減産処理を行う
             $char->hp = $_COOKIE[$char_name. '_hp'];
-            $damage = $skills[$use_skill_id]["damage"];
 
-            //$hpに代入してしまうと、updatePoisonStatusメソッドへHPを継承できないため、毒異常減算のみが上書きされてしまう。
-            $char->hp -= $damage;
+            //麻痺攻撃を受けたもしくは麻痺継続の場合は攻撃等できない
+            if ($char->paralysis == false) {
 
-            // キャラクタが即死したかどうかをセットする
-            $char->setDeath($skills[$use_skill_id]["death"]);
+                //すでにHPがある場合は戦闘の減産処理を行う
+                $damage = $skills[$use_skill_id]["damage"];
 
-            // HP 0以下ならキャラクターの死亡状態にtrue（死亡）をセット
-            if (0 >= $hp && false) { //TODO: たぶんcookieにHPマイナスで入ってるからfalseにしておく
-                $char->setDeath(true);
+                //$hpに代入してしまうと、updatePoisonStatusメソッドへHPを継承できないため、毒異常減算のみが上書きされてしまう。
+                $char->hp -= $damage;
+
+                // キャラクタが即死したかどうかをセットする
+                $char->setDeath($skills[$use_skill_id]["death"]);
+
+                // HP 0以下ならキャラクターの死亡状態にtrue（死亡）をセット
+                if (0 >= $hp && false) { //TODO: たぶんcookieにHPマイナスで入ってるからfalseにしておく
+                    $char->setDeath(true);
+                }
+
+                // 死んでいたらHPを0にセット
+                if ($char->skills[$use_skill_id]["death"]) {
+                    $hp = 0;
+                }
+
+                // poison_statusクラスは毎回インスタンス化されるけど一旦これで
+                $poison_status = new Battle\Poison();
+
+                $char = $poison_status->updatePoisonStatus($char_name, $char, $skills, $use_skill_id, $save);
+
+                $hp = $char->hp;
+
+
+                // キャラクターオブジェクトのHPを更新
+                /* updatePoisonStatus内でHP減算処理済みのため、
+                こちらの処理は不要。今後必要なければ削除 */
+                $char->setHp($hp);
+
+                // キャラクターのHPをcookieにセット
+                $save->cookie($char_name. '_hp', $hp);
             }
-
-            // 死んでいたらHPを0にセット
-            if ($char->skills[$use_skill_id]["death"]) {
-                $hp = 0;
-            }
-
-            // poison_statusクラスは毎回インスタンス化されるけど一旦これで
-            $poison_status = new Battle\Poison();
-
-            $char = $poison_status->updatePoisonStatus($char_name, $char, $skills, $use_skill_id, $save);
-
-            $hp = $char->hp;
-
-            // キャラクターオブジェクトのHPを更新
-            /* updatePoisonStatus内でHP減算処理済みのため、
-            こちらの処理は不要。今後必要なければ削除 */
-            //$char->setHp($hp);
-
-            // キャラクターのHPをcookieにセット
-            $save->cookie($char_name. '_hp', $hp);
         }
         // 更新済みObjectを返す
         return $char;

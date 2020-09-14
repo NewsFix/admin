@@ -28,8 +28,6 @@ class Poison
 
         //$_COOKIE[$char_name."_poison"]がCOOKIE配列に入っていない場合
         if (!isset($_COOKIE[$char_name."_poison"])) {
-            error_log($char_name);
-
             $char = $this->setPoison($char_name, $save, $char, $skills[$use_skill_id]["poison"]);
 
             //毒の時の処理
@@ -48,9 +46,6 @@ class Poison
                 // 毒のリフレッシュ処理を行う
                 if ($this->refreshPoison()) {
                     // 毒のリフレッシュ(治った)とき, キャラを毒falseにする
-                    error_log($char_name);
-
-
                     $char = $this->setPoison($char_name, $save, $char, false);
                 } // 毒解除失敗時はなにもしない
 
@@ -59,8 +54,6 @@ class Poison
                     $char->hp -= $this->poisonLogic(10000, 20000);
                 }
             } else { // キャラクターが毒ではないとき
-
-                error_log($char_name);
 
                 $char = $this->setPoison($char_name, $save, $char, $skills[$use_skill_id]["poison"]);
 
@@ -84,14 +77,13 @@ class Poison
     */
     private function setPoison(String $char_name, Object $save, Object $char, Bool $isPoison): Object
     {
-        error_log($isPoison ?"毒になった": "スキルは毒攻撃ではなかったもしくは毒にならなかった");
+        //error_log($isPoison ?"毒になった": "スキルは毒攻撃ではなかったもしくは毒にならなかった");
 
         //毒化計算を終えたtrueもしくはfalseをプロパティにセットする
         $char->setPoison($isPoison);
 
         //上記のプロパティ結果をCOOKIEにセットする
         //注意: setcookieのセットタイミングは2周目以降に適応
-        error_log($char_name);
         $save->cookie($char_name. "_poison", $isPoison ? "1": "0");
 
         return $char;
@@ -119,11 +111,11 @@ class Poison
     {
         // 1/2で毒解除処理
         if (50 > rand(0, 100)) {
-            error_log("毒が解除された");
+            //error_log("毒が解除された");
             return true;
         }
         // 毒解除できないとき
-        error_log("毒の解除に失敗した");
+        //error_log("毒の解除に失敗した");
         return false;
     }
 }

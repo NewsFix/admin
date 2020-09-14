@@ -53,7 +53,8 @@
             <div class="session_info">
             <p id="enemy_status"></p>
             <p id="player_status"></p>
-            <p id="player_poison_check"></p>
+            <p id="player_paralysis_check"></p>
+            <!-- <p id="player_poison_check"></p> -->
             </div>
           </div>
 
@@ -94,15 +95,17 @@
 
           req.onload = function() {
 
-            var foo = req.response;
-
             var result = document.getElementById('result');
 
             var pinoko_value = document.getElementById('enemy_status');
 
             var player_value = document.getElementById('player_status');
 
+            /*
             var player_poison_check = document.getElementById('player_poison_check');
+            */
+
+            var player_paralysis_check = document.getElementById('player_paralysis_check');
 
             var player_hp = document.getElementById('player_hp');
 
@@ -118,14 +121,21 @@
 
               const current_player_hp = "現在" + data.player.name + "のHP:" + data.player.hp;
               const current_enemy_hp = "現在" + data.pinoko.name + "のHP:" + data.pinoko.hp;
+              const current_paralysis_check = "現在の麻痺:" + data.player.paralysis;
+              /*
               const current_poison_check = "現在の毒化:" + data.player.poison;
+              */
 
 
               //JSON.parse処理が完了しているので、以下phpファイルで定義した各変数が使用可能となっている
               result.innerHTML = data.strike_text;
               pinoko_value.innerHTML = current_enemy_hp;
               player_value.innerHTML = current_player_hp;
+              player_paralysis_check.innerHTML = current_paralysis_check;
+              /* 麻痺確認中のためコメントアウト
               player_poison_check.innerHTML = current_poison_check;
+              */
+
               //敵のスキルに合わせてHP増減をさせるためタイムラグを生じさせている
               var player_hp_text = function(){
                 player_hp.innerHTML = data.player.hp;

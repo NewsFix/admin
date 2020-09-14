@@ -24,6 +24,7 @@ class Char
         $this->skills = $skills;
         $this->death = false; // 死の状態デフォルトfalseだから引数には入れていない
         $this->poison = false; // 毒の状態デフォルトfalseだから引数には入れていない
+        $this->paralysis = false; // 麻痺の状態デフォルトfalseだから引数には入れていない
         $this->encode_bug = false; // エンコード状態異常デフォルトfalseだから引数には入れていない
     }
 
@@ -41,6 +42,7 @@ class Char
             "mp"=> $this->mp,
             "death" => $this->death, // 死んでいたらtrue
             "poison" => $this->poison,
+            "paralysis" => $this->paralysis,
             "encode_bug" => $this->encode_bug
         );
     }
