@@ -35,7 +35,7 @@ class Poison
             //毒の時の処理
             //上記の理由からCOOKIEは、まだ更新されていないためCOOKIEを参考にしない
             if ($char->poison) {
-                $hp -= $this->poisonLogic(10000, 20000);
+                $char->hp -= $this->poisonLogic(10000, 20000);
             }
         } else {
             //毒継続かの判断のためCOOKIEに入っている既存値を参照し、かつ毒であった場合
@@ -56,7 +56,7 @@ class Poison
 
                 // キャラクターが毒であればHP減算
                 if ($char->poison) {
-                    $hp -= $this->poisonLogic(10000, 20000);
+                    $char->hp -= $this->poisonLogic(10000, 20000);
                 }
             } else { // キャラクターが毒ではないとき
 
@@ -65,7 +65,7 @@ class Poison
                 $char = $this->setPoison($char_name, $save, $char, $skills[$use_skill_id]["poison"]);
 
                 if ($char->poison) {
-                    $hp -= $this->poisonLogic(10000, 20000);
+                    $char->hp -= $this->poisonLogic(10000, 20000);
                 }
             }
         }

@@ -82,7 +82,9 @@ class Command
             //すでにHPがある場合は戦闘の減産処理を行う
             $char->hp = $_COOKIE[$char_name. '_hp'];
             $damage = $skills[$use_skill_id]["damage"];
-            $hp = $char->hp - $damage;
+
+            //$hpに代入してしまうと、updatePoisonStatusメソッドへHPを継承できないため、毒異常減算のみが上書きされてしまう。
+            $char->hp -= $damage;
 
             // キャラクタが即死したかどうかをセットする
             $char->setDeath($skills[$use_skill_id]["death"]);
@@ -102,8 +104,13 @@ class Command
 
             $char = $poison_status->updatePoisonStatus($char_name, $char, $skills, $use_skill_id, $save);
 
+            $hp = $char->hp;
+
             // キャラクターオブジェクトのHPを更新
-            $char->setHp($hp);
+            /* updatePoisonStatus内でHP減算処理済みのため、
+            こちらの処理は不要。今後必要なければ削除 */
+            //$char->setHp($hp);
+
             // キャラクターのHPをcookieにセット
             $save->cookie($char_name. '_hp', $hp);
         }

@@ -60,7 +60,7 @@ class Skills
             "damage"=> 10,
             "useMP" => 0,
             "text" => "を解剖した",
-            "death" => $this->isDead(20),
+            "death" => $this->isDead(0),
             "poison" => $this->isPoison(100)
           ],
 

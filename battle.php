@@ -120,6 +120,7 @@
               const current_enemy_hp = "現在" + data.pinoko.name + "のHP:" + data.pinoko.hp;
               const current_poison_check = "現在の毒化:" + data.player.poison;
 
+
               //JSON.parse処理が完了しているので、以下phpファイルで定義した各変数が使用可能となっている
               result.innerHTML = data.strike_text;
               pinoko_value.innerHTML = current_enemy_hp;
