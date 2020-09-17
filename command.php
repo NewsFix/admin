@@ -3,6 +3,7 @@ session_start();
 
 require_once('battle/text.php');
 require_once('battle/saveData.php');
+require_once('battle/calculate.php');
 require_once('battle/poison_status.php');
 require_once('battle/paralysis_status.php');
 
@@ -12,6 +13,8 @@ require_once('battle/paralysis_status.php');
 use Battle\Text;
 // データセーブを管理するClass
 use Battle\SaveData;
+// 戦闘ステータス増減および死亡状態を管理するClass
+use Battle\CalcStatus;
 // 毒異常を管理するClass
 use Battle\Poison;
 // 麻痺異常を管理するClass

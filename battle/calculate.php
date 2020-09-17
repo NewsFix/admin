@@ -1,4 +1,6 @@
 <?php
+namespace Battle;
+
 /**
  * キャラのダメージ計算利用
  * HP,MPの増減計算を行う
