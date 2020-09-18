@@ -4,6 +4,7 @@ session_start();
 require_once('battle/text.php');
 require_once('battle/saveData.php');
 require_once('battle/calculate.php');
+require_once('battle/encode_bug.php');
 require_once('battle/poison_status.php');
 require_once('battle/paralysis_status.php');
 
@@ -19,6 +20,8 @@ use Battle\CalcStatus;
 use Battle\Poison;
 // 麻痺異常を管理するClass
 use Battle\Paralysis;
+// エンコード状態異常を管理するClass
+use Battle\EncodeBug;
 
 class Command
 {
@@ -96,6 +99,7 @@ class Command
 
             //麻痺攻撃を受けたもしくは麻痺継続の場合は攻撃等できない
             if ($char->paralysis == false) {
+                $calc_status = new Battle\CalcStatus;
 
                 //すでにHPがある場合は戦闘の減産処理を行う
                 $damage = $skills[$use_skill_id]["damage"];

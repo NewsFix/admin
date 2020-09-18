@@ -52,7 +52,8 @@ class Skills
             "text" => "にお注射をねじ込んだ!!",
             "death" => $this->isDead(0),
             "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(100)
+            "paralysis" => $this->isParalysis(100),
+            "encode_bug" => $this->isEncodeBug(0),
           ],
 
           [
@@ -63,7 +64,8 @@ class Skills
             "text" => "を解剖した",
             "death" => $this->isDead(0),
             "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(100)
+            "paralysis" => $this->isParalysis(100),
+            "encode_bug" => $this->isEncodeBug(0)
           ],
 
           [
@@ -74,7 +76,8 @@ class Skills
             "text" => "はのたうち回っている。",
             "death" => $this->isDead(0),
             "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(100)
+            "paralysis" => $this->isParalysis(100),
+            "encode_bug" => $this->isEncodeBug(0)
           ],
 
           [
@@ -85,7 +88,8 @@ class Skills
             "text" => "はオペに失敗した....",
             "death" => $this->isDead(0),
             "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(100)
+            "paralysis" => $this->isParalysis(100),
+            "encode_bug" => $this->isEncodeBug(0)
           ],
 
           [
@@ -96,7 +100,8 @@ class Skills
             "text" => "へ出力した。",
             "death" => $this->isDead(0),
             "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(0)
+            "paralysis" => $this->isParalysis(0),
+            "encode_bug" => $this->isEncodeBug(0)
           ],
 
           [
@@ -107,7 +112,8 @@ class Skills
             "text" => "に対し変数を定義できない!!",
             "death" => $this->isDead(0),
             "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(0)
+            "paralysis" => $this->isParalysis(0),
+            "encode_bug" => $this->isEncodeBug(0)
           ],
 
           [
@@ -118,7 +124,8 @@ class Skills
             "text" => "を強烈にカツアゲした!!",
             "death" => $this->isDead(0),
             "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(0)
+            "paralysis" => $this->isParalysis(0),
+            "encode_bug" => $this->isEncodeBug(0)
           ],
 
           [
@@ -129,7 +136,8 @@ class Skills
             "text" => "とは無関係に闇夜を切り裂いた!!",
             "death" => $this->isDead(0),
             "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(0)
+            "paralysis" => $this->isParalysis(0),
+            "encode_bug" => $this->isEncodeBug(0)
           ],
         ];
     }
@@ -177,6 +185,18 @@ class Skills
     * @return bool
     */
     private function isParalysis(int $paralysis_rate):bool
+    {
+        $rate = rand(0, 100);
+        return $rate < $paralysis_rate ? true : false;
+    }
+
+    /**
+    * エンコード状態異常率の定義
+    *
+    * @param int $encode_bug エンコード状態異常率
+    * @return bool
+    */
+    private function isEncodeBug(int $paralysis_rate):bool
     {
         $rate = rand(0, 100);
         return $rate < $paralysis_rate ? true : false;

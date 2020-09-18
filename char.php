@@ -110,7 +110,7 @@ class Char
      * @param bool $encode_bug エンコード状態異常でtrue
      * @return void true/falseをプロパティへ格納
      */
-    public function setEncode(bool $encode_bug):void
+    public function setEncodeBug(bool $encode_bug):void
     {
         $this->encode_bug = $encode_bug;
     }
