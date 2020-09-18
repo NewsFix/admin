@@ -54,12 +54,6 @@ class Command
         // 戦闘表示テキストの取得
         $strike_text = $this->getStrikeTexts($player, $pinoko, $player_use_skill_id, $pinoko_use_skill_id, $is_first);
 
-        /**
-         * 文字化け状態異常を生成
-         *
-         *
-         */
-
 
         //取得した戦闘コメント、更新された各オブジェクトのHPプロパティを配列化して返す。呼び出しはgate_way.phpより行う。
         return array(
@@ -86,9 +80,9 @@ class Command
         $save = new Battle\SaveData();
 
         // Paralysisクラスは毎回インスタンス化されるけど一旦これで
-
         $paralysis = new Battle\Paralysis();
         $char = $paralysis->updateParalysisStatus($char_name, $char, $skills, $use_skill_id, $save);
+
 
         //COOKIE,SESSIONいずれも挿入する情報は必要最低限にする。HP,MP意外戦闘で不必要な情報は不要。
         if (!isset($_COOKIE[$char_name. '_hp'])) {
@@ -99,6 +93,8 @@ class Command
 
             //麻痺攻撃を受けたもしくは麻痺継続の場合は攻撃等できない
             if ($char->paralysis == false) {
+
+                //暫定的に配置しているため機能しない。エンコード異常処理が終わり次第実装
                 $calc_status = new Battle\CalcStatus;
 
                 //すでにHPがある場合は戦闘の減産処理を行う
@@ -119,6 +115,10 @@ class Command
                 if ($char->skills[$use_skill_id]["death"]) {
                     $hp = 0;
                 }
+
+                // EncodeBugクラスは毎回インスタンス化されるけど一旦これで
+                $encode_bug = new Battle\Encodebug();
+                $char = $encode_bug->updateEncodeBugStatus($char_name, $char, $skills, $use_skill_id, $save);
 
                 // poison_statusクラスは毎回インスタンス化されるけど一旦これで
                 $poison_status = new Battle\Poison();
@@ -160,6 +160,7 @@ class Command
             $player_text = "$enemy->name がおそいかかってきた!!!";
         } else {
             $player_text = $textGenerator->attackText($player->name, $player->skills[$player_use_skill_id]['name'], $player->skills[$player_use_skill_id]['text'], $enemy->name, $player->skills[$player_use_skill_id]['damage']);
+
             $enemy_text = $textGenerator->attackText($enemy->name, $enemy->skills[$enemy_use_skill_id]['name'], $enemy->skills[$enemy_use_skill_id]['text'], $player->name, $enemy->skills[$enemy_use_skill_id]['damage']);
         }
 

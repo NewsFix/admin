@@ -3,6 +3,7 @@ namespace Battle;
 
 class EncodeBug
 {
+    private const ENCODE_BUG = "_encode_bug";
 
     /**
      * エンコード状態異常化の仕組みのパッケージ
@@ -17,13 +18,13 @@ class EncodeBug
 
     public function updateEncodeBugStatus(String $char_name, object $char, array $skills, Int $use_skill_id, object $save)
     {
-
-        //$_COOKIE[$char_name."_encode_bug"]がCOOKIE配列に入っていない場合
-        if (!isset($_COOKIE[$char_name."_encode_bug"])) {
+        //$_COOKIE[$char_name.self::ENCODE_BUG]がCOOKIE配列に入っていない場合
+        if (!isset($_COOKIE[$char_name.self::ENCODE_BUG])) {
             $char = $this->setEncodeBug($char_name, $save, $char, $skills[$use_skill_id]["encode_bug"]);
         } else {
+            error_log("elseにきてるよ！！");
             //エンコード状態異常継続かの判断のためCOOKIEに入っている既存値を参照し、かつエンコード状態異常であった場合
-            $is_encode_bug = $_COOKIE[$char_name."_encode_bug"] == "1";
+            $is_encode_bug = $_COOKIE[$char_name.self::ENCODE_BUG] == "1";
             //別に三項演算である必要はない
 
             //$isPoisonに直接intの1を入力した場合はなぜか動かない。php -a 試した結果trueになっていた
@@ -62,7 +63,7 @@ class EncodeBug
         //上記のプロパティ結果をCOOKIEにセットする
         //注意: setcookieのセットタイミングは2周目以降に適応
 
-        $save->cookie($char_name. "_encodebug", $is_encode_bug ? "1": "0");
+        $save->cookie($char_name.self::ENCODE_BUG, $is_encode_bug ? "1": "0");
 
         return $char;
     }

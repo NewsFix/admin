@@ -51,9 +51,9 @@ class Skills
             "useMP" => 0,
             "text" => "にお注射をねじ込んだ!!",
             "death" => $this->isDead(0),
-            "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(100),
-            "encode_bug" => $this->isEncodeBug(0),
+            "poison" => $this->isPoison(100),
+            "paralysis" => $this->isParalysis(0),
+            "encode_bug" => $this->isEncodeBug(100),
           ],
 
           [
@@ -63,9 +63,9 @@ class Skills
             "useMP" => 0,
             "text" => "を解剖した",
             "death" => $this->isDead(0),
-            "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(100),
-            "encode_bug" => $this->isEncodeBug(0)
+            "poison" => $this->isPoison(100),
+            "paralysis" => $this->isParalysis(0),
+            "encode_bug" => $this->isEncodeBug(100)
           ],
 
           [
@@ -75,9 +75,9 @@ class Skills
             "useMP" => 0,
             "text" => "はのたうち回っている。",
             "death" => $this->isDead(0),
-            "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(100),
-            "encode_bug" => $this->isEncodeBug(0)
+            "poison" => $this->isPoison(100),
+            "paralysis" => $this->isParalysis(0),
+            "encode_bug" => $this->isEncodeBug(100)
           ],
 
           [
@@ -87,9 +87,9 @@ class Skills
             "useMP" => 0,
             "text" => "はオペに失敗した....",
             "death" => $this->isDead(0),
-            "poison" => $this->isPoison(0),
-            "paralysis" => $this->isParalysis(100),
-            "encode_bug" => $this->isEncodeBug(0)
+            "poison" => $this->isPoison(100),
+            "paralysis" => $this->isParalysis(0),
+            "encode_bug" => $this->isEncodeBug(100)
           ],
 
           [
